@@ -1,0 +1,122 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  username   String   @unique
+  password   String
+  role       Role     @default(user)
+  created_at DateTime @default(now())
+
+  @@map("users")
+}
+
+enum Role {
+  admin
+  user
+}
+
+model Country {
+  id           Int     @id @default(autoincrement())
+  name         String
+  slug         String  @unique
+  flag         String
+  cover_image  String?
+  region       String?
+  is_popular   Boolean @default(false)
+  is_active    Boolean @default(true)
+  plans        Plan[]
+
+  @@map("countries")
+}
+
+model Plan {
+  id           Int         @id @default(autoincrement())
+  country_id   Int
+  title        String
+  days         Int
+  data_amount  String
+  price        Decimal     @db.Decimal(10, 2)
+  description  String?     @db.Text
+  network      String
+  hotspot      Boolean     @default(true)
+  speed        String?
+  is_active    Boolean     @default(true)
+  country      Country     @relation(fields: [country_id], references: [id])
+  order_items  OrderItem[]
+  esim_codes   EsimCode[]
+
+  @@map("plans")
+}
+
+model Order {
+  id              Int         @id @default(autoincrement())
+  order_number    String      @unique
+  customer_name   String
+  customer_email  String
+  paypal_order_id String?     @unique
+  status          OrderStatus @default(Pending)
+  paid_at         DateTime?
+  total           Decimal     @db.Decimal(10, 2)
+  created_at      DateTime    @default(now())
+  order_items     OrderItem[]
+
+  @@map("orders")
+}
+
+enum OrderStatus {
+  Pending
+  Paid
+  WaitingUpload
+  Completed
+  Cancelled
+  Refunded
+}
+
+model OrderItem {
+  id       Int    @id @default(autoincrement())
+  order_id Int
+  plan_id  Int
+  qty      Int
+  price    Decimal @db.Decimal(10, 2)
+  order    Order  @relation(fields: [order_id], references: [id])
+  plan     Plan   @relation(fields: [plan_id], references: [id])
+  esim_codes EsimCode[]
+
+  @@map("order_items")
+}
+
+model EsimCode {
+  id              Int          @id @default(autoincrement())
+  plan_id         Int
+  activation_code String?      @db.Text
+  qr_image        String?
+  manual_code     String?      @db.Text
+  status          EsimStatus   @default(available)
+  assigned_order  Int?
+  order_item_id   Int?
+  created_at      DateTime     @default(now())
+  plan            Plan         @relation(fields: [plan_id], references: [id])
+  order_item      OrderItem?   @relation(fields: [order_item_id], references: [id])
+
+  @@map("esim_codes")
+}
+
+enum EsimStatus {
+  available
+  sold
+}
+
+model Setting {
+  id    Int    @id @default(autoincrement())
+  key   String @unique
+  value String @db.Text
+
+  @@map("settings")
+}
