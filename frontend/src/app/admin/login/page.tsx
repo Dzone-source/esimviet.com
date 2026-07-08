@@ -2,9 +2,26 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
+import axios from 'axios';
 import { useAuth } from '@/context/AuthContext';
 import { Wifi, Eye, EyeOff, Lock } from 'lucide-react';
 import toast from 'react-hot-toast';
+
+function getLoginErrorMessage(error: unknown): string {
+  if (axios.isAxiosError(error)) {
+    if (!error.response) {
+      return 'Không kết nối được API. Kiểm tra backend đang chạy và NEXT_PUBLIC_API_URL.';
+    }
+    if (error.response.status === 401) {
+      return 'Sai username hoặc password. Mặc đnh: admin / admin123';
+    }
+    if (error.response.status >= 500) {
+      return 'Lỗi server – database chưa kết nối hoặc chưa seed. Chạy: npm run reset-admin';
+    }
+    return error.response.data?.message || 'Đăng nhập thất bại';
+  }
+  return 'Đăng nhập thất bại';
+}
 
 export default function AdminLoginPage() {
   const [username, setUsername] = useState('');
@@ -22,8 +39,8 @@ export default function AdminLoginPage() {
       await login(username, password);
       toast.success('Welcome back!');
       router.push('/admin/dashboard');
-    } catch {
-      toast.error('Invalid credentials');
+    } catch (error) {
+      toast.error(getLoginErrorMessage(error));
     } finally {
       setLoading(false);
     }

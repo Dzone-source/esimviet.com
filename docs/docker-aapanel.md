@@ -356,6 +356,54 @@ esim/
 
 ## Xử lý lỗi thường gặp
 
+### Admin login báo "Invalid credentials" / không đăng nhập được
+
+**Nguyên nhân phổ biến nhất:** Database chưa kết nối hoặc chưa tạo user `admin` (seed chưa chạy).
+
+**Bước 1 – Kiểm tra backend + database**
+
+```bash
+# Docker (MariaDB trong Docker)
+docker compose logs backend | tail -30
+
+# Docker (MariaDB aaPanel)
+docker compose -f docker-compose.aapanel-db.yml logs backend | tail -30
+```
+
+Phải thấy: `✅ Database is ready` và `🌱 Seeding database...`
+
+**Bước 2 – Reset tài khoản admin**
+
+```bash
+# Docker
+docker compose exec backend npm run reset-admin
+
+# Hoặc đặt password mới
+docker compose exec backend npm run reset-admin -- matkhau_moi
+
+# Không dùng Docker
+cd backend && npm run reset-admin
+```
+
+**Bước 3 – Đăng nhập**
+
+| Username | Password |
+|----------|----------|
+| `admin` | `admin123` (mặc định sau seed/reset) |
+
+**Bước 4 – Test API trực tiếp**
+
+```bash
+curl -X POST http://127.0.0.1:8080/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"admin","password":"admin123"}'
+```
+
+- Trả về `"success":true` → OK, thử lại trình duyệt (xóa cache)
+- Trả về `"Can't reach database"` → sửa `DATABASE_URL` / `DB_HOST` trong `.env`
+- Trả về `401 Invalid credentials` → chạy lại `reset-admin`
+
+---
 ### 502 Bad Gateway trên aaPanel
 
 ```bash
