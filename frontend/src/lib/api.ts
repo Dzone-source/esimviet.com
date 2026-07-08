@@ -1,36 +1,13 @@
 import axios from 'axios';
 
-function normalizeApiBase(url?: string): string {
-  const fallback = 'http://localhost:4000';
-  let base = (url || fallback).trim().replace(/\/$/, '');
-
-  // Remove accidental quotes from .env
-  base = base.replace(/^["']|["']$/g, '');
-
-  // Fix: esimviet.com → https://esimviet.com (prevents axios "Unsupported protocol")
-  if (base && !/^https?:\/\//i.test(base)) {
-    base = `https://${base}`;
-  }
-
-  return `${base}/api`;
-}
-
-// Browser MUST use same-origin relative path (fixes CORS + wrong protocol)
-function getApiBaseUrl(): string {
-  if (typeof window !== 'undefined') {
-    return '/api';
-  }
-  return normalizeApiBase(process.env.NEXT_PUBLIC_API_URL);
-}
-
+// Always use same-origin /api in the browser bundle.
+// Never bake localhost or env URLs into client JS (fixes admin login on production).
 export const api = axios.create({
-  baseURL: getApiBaseUrl(),
+  baseURL: '/api',
   headers: { 'Content-Type': 'application/json' },
 });
 
-// Attach JWT token for admin requests
 api.interceptors.request.use((config) => {
-  // Ensure browser always hits same-origin /api
   if (typeof window !== 'undefined') {
     config.baseURL = '/api';
     const token = localStorage.getItem('admin_token');

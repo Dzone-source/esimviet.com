@@ -294,13 +294,36 @@ docker compose up -d --build     # cập nhật code + rebuild
 
 ### Login gọi `localhost:4000`
 
-→ Chưa rebuild frontend sau khi clone:
+**Xóa cache trình duyệt KHÔNG giúp** — server đang phục vụ file JS cũ.
+
+Kiểm tra nhanh trên VPS:
+
+```bash
+curl -sL https://esimviet.com/admin/login | grep -o 'admin/login/page-[^"]*\.js' | head -1
+# Lấy tên chunk ở trên, rồi:
+curl -sL "https://esimviet.com/_next/static/chunks/app/admin/login/page-XXXX.js" | grep localhost:4000
+```
+
+Nếu thấy `localhost:4000` → bắt buộc rebuild frontend (không phải lỗi cache):
 
 ```bash
 cd /www/wwwroot/esimviet
-docker compose build --no-cache frontend
-docker compose up -d frontend
+
+# Xóa build cũ trên host (aaPanel đôi khi serve thẳng thư mục này)
+rm -rf .next frontend/.next
+
+# Cập nhật api.ts mới nhất
+git pull origin cursor/esim-website-1575
+
+# Rebuild + kiểm tra tự động
+chmod +x docker/rebuild-frontend.sh
+./docker/rebuild-frontend.sh
 ```
+
+Sau rebuild, chunk login phải có `baseURL:"/api"` — **không** có `localhost:4000`.
+
+Mở **Incognito** → F12 → Network → đăng nhập → request phải là:
+`https://esimviet.com/api/auth/login`
 
 ### `git pull` không hoạt động
 
