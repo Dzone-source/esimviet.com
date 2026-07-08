@@ -1,9 +1,17 @@
 import axios from 'axios';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+// Browser: always use same-origin /api (Nginx/Docker routes to backend).
+// SSR/build: fall back to env or localhost.
+function getApiBaseUrl(): string {
+  if (typeof window !== 'undefined') {
+    return '/api';
+  }
+  const base = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+  return `${base.replace(/\/$/, '')}/api`;
+}
 
 export const api = axios.create({
-  baseURL: `${API_BASE}/api`,
+  baseURL: getApiBaseUrl(),
   headers: { 'Content-Type': 'application/json' },
 });
 
