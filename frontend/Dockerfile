@@ -15,7 +15,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # NEXT_PUBLIC_* must be set at build time
-ARG NEXT_PUBLIC_API_URL=http://localhost:4000
+ARG NEXT_PUBLIC_API_URL=https://esimviet.com
 ARG NEXT_PUBLIC_PAYPAL_CLIENT_ID=
 ARG NEXT_PUBLIC_SITE_NAME=eSIM Global
 ARG NEXT_PUBLIC_SITE_URL=http://localhost:3000

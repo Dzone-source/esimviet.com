@@ -1,13 +1,26 @@
 import axios from 'axios';
 
-// Browser: always use same-origin /api (Nginx/Docker routes to backend).
-// SSR/build: fall back to env or localhost.
+function normalizeApiBase(url?: string): string {
+  const fallback = 'http://localhost:4000';
+  let base = (url || fallback).trim().replace(/\/$/, '');
+
+  // Remove accidental quotes from .env
+  base = base.replace(/^["']|["']$/g, '');
+
+  // Fix: esimviet.com → https://esimviet.com (prevents axios "Unsupported protocol")
+  if (base && !/^https?:\/\//i.test(base)) {
+    base = `https://${base}`;
+  }
+
+  return `${base}/api`;
+}
+
+// Browser MUST use same-origin relative path (fixes CORS + wrong protocol)
 function getApiBaseUrl(): string {
   if (typeof window !== 'undefined') {
     return '/api';
   }
-  const base = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
-  return `${base.replace(/\/$/, '')}/api`;
+  return normalizeApiBase(process.env.NEXT_PUBLIC_API_URL);
 }
 
 export const api = axios.create({
@@ -17,7 +30,9 @@ export const api = axios.create({
 
 // Attach JWT token for admin requests
 api.interceptors.request.use((config) => {
+  // Ensure browser always hits same-origin /api
   if (typeof window !== 'undefined') {
+    config.baseURL = '/api';
     const token = localStorage.getItem('admin_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
