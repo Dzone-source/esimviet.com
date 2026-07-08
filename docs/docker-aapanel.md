@@ -31,6 +31,65 @@ Docker Nginx (:8080)
 
 ---
 
+## MariaDB: Docker hay aaPanel?
+
+Có **2 cách** — chọn một, không dùng cả hai cùng lúc:
+
+| | **Cách 1: MariaDB trong Docker** (mặc định) | **Cách 2: MariaDB của aaPanel** |
+|---|---|---|
+| File compose | `docker-compose.yml` | `docker-compose.aapanel-db.yml` |
+| Quản lý DB | Terminal / phpMyAdmin container | **aaPanel → Database** (GUI) |
+| Backup | `docker compose exec mariadb mysqldump...` | **aaPanel → Backup** |
+| RAM | Tốn thêm ~200–400MB | Tiết kiệm RAM hơn |
+| Phù hợp | VPS mới, chưa cài MariaDB aaPanel | **Đã có MariaDB trên aaPanel** ✅ |
+
+### Cách 1 – MariaDB trong Docker (mặc định)
+
+```bash
+docker compose up -d --build
+```
+
+Không cần cài MariaDB trên aaPanel. Database chạy trong container `esim-mariadb`.
+
+### Cách 2 – Dùng MariaDB sẵn có của aaPanel (khuyến nghị nếu đã cài aaPanel DB)
+
+**Bước A – Tạo database trên aaPanel**
+
+1. **Database → Add database**
+2. Tên DB: `esim_db`
+3. User: `esim_user` + mật khẩu mạnh
+4. Ghi lại user/password
+
+**Bước B – Cho phép Docker kết nối**
+
+Trong aaPanel → Database → **root password** → phpMyAdmin hoặc terminal:
+
+```sql
+-- Cho phép user kết nối từ Docker
+GRANT ALL PRIVILEGES ON esim_db.* TO 'esim_user'@'%' IDENTIFIED BY 'your_password';
+FLUSH PRIVILEGES;
+```
+
+> Nếu aaPanel MariaDB chỉ bind `127.0.0.1`, Docker vẫn kết nối được qua `host.docker.internal` (IP máy host).
+
+**Bước C – Sửa `.env`**
+
+```env
+DB_HOST=host.docker.internal
+DB_PORT=3306
+MYSQL_USER=esim_user
+MYSQL_PASSWORD=your_password
+MYSQL_DATABASE=esim_db
+```
+
+**Bước D – Chạy (không có container MariaDB)**
+
+```bash
+docker compose -f docker-compose.aapanel-db.yml up -d --build
+```
+
+---
+
 ## Yêu cầu
 
 - VPS Ubuntu 20.04+ / Debian
