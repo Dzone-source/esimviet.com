@@ -1,6 +1,6 @@
 /**
  * Reset admin password – plain Node.js (no ts-node required)
- * Usage: node scripts/reset-admin.mjs [new_password]
+ * Usage: node scripts/reset-admin.cjs [new_password]
  */
 const bcrypt = require('bcryptjs');
 const { PrismaClient } = require('@prisma/client');

@@ -32,7 +32,7 @@ npx prisma db push --skip-generate
 
 if [ "$SEED_DATABASE" = "true" ]; then
   echo "🌱 Seeding database..."
-  node scripts/seed.mjs || echo "⚠️  Seed skipped or already applied"
+  node scripts/seed.cjs || echo "⚠️  Seed skipped or already applied"
 fi
 
 echo "🚀 Starting backend..."

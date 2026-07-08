@@ -12,8 +12,8 @@
     "prisma:push": "prisma db push",
     "prisma:studio": "prisma studio",
     "seed": "ts-node prisma/seed.ts",
-    "reset-admin": "node scripts/reset-admin.mjs",
-    "seed:prod": "node scripts/seed.mjs"
+    "reset-admin": "node scripts/reset-admin.cjs",
+    "seed:prod": "node scripts/seed.cjs"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
