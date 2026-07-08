@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { createError } from './errorHandler';
+import { extractToken } from '../utils/token';
 
 export interface AuthRequest extends Request {
   user?: {
@@ -12,12 +13,11 @@ export interface AuthRequest extends Request {
 
 export const authenticate = (req: AuthRequest, _res: Response, next: NextFunction): void => {
   try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader?.startsWith('Bearer ')) {
+    const token = extractToken(req);
+    if (!token) {
       throw createError('No token provided', 401);
     }
 
-    const token = authHeader.split(' ')[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
       id: number;
       username: string;

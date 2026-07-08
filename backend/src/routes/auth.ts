@@ -5,6 +5,7 @@ import { body, validationResult } from 'express-validator';
 import { prisma } from '../utils/prisma';
 import { createError } from '../middleware/errorHandler';
 import { authenticate, AuthRequest } from '../middleware/auth';
+import { authCookieHeader, clearAuthCookieHeader } from '../utils/token';
 
 const router = Router();
 
@@ -35,6 +36,7 @@ router.post(
         { expiresIn: process.env.JWT_EXPIRES_IN || '7d' } as jwt.SignOptions
       );
 
+      res.setHeader('Set-Cookie', authCookieHeader(token));
       res.json({
         success: true,
         token,
@@ -57,6 +59,11 @@ router.get('/me', authenticate, async (req: AuthRequest, res: Response, next: Ne
   } catch (error) {
     next(error);
   }
+});
+
+router.post('/logout', (_req: Request, res: Response): void => {
+  res.setHeader('Set-Cookie', clearAuthCookieHeader());
+  res.json({ success: true });
 });
 
 router.put(

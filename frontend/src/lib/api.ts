@@ -8,19 +8,30 @@ export function setUnauthorizedHandler(handler: UnauthorizedHandler) {
   unauthorizedHandler = handler;
 }
 
+function setHeader(config: InternalAxiosRequestConfig, key: string, value: string) {
+  if (typeof config.headers.set === 'function') {
+    config.headers.set(key, value);
+  } else {
+    (config.headers as Record<string, string>)[key] = value;
+  }
+}
+
 function attachAuthHeader(config: InternalAxiosRequestConfig): InternalAxiosRequestConfig {
   if (typeof window === 'undefined') return config;
 
   config.baseURL = '/api';
   const token = localStorage.getItem('admin_token')?.trim();
   if (token) {
-    config.headers.set('Authorization', `Bearer ${token}`);
+    // Authorization may be stripped by aaPanel/nginx — also send X-Access-Token + cookie
+    setHeader(config, 'Authorization', `Bearer ${token}`);
+    setHeader(config, 'X-Access-Token', token);
   }
   return config;
 }
 
 export const api = axios.create({
   baseURL: '/api',
+  withCredentials: true,
   headers: { 'Content-Type': 'application/json' },
 });
 
@@ -32,7 +43,6 @@ api.interceptors.response.use(
     const status = error.response?.status;
     const url = String(error.config?.url || '');
 
-    // Only invalidate session on /auth/me 401 — not on every admin API error
     if (
       status === 401 &&
       typeof window !== 'undefined' &&

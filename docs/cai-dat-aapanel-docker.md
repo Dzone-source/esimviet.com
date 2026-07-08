@@ -209,6 +209,8 @@ location / {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto $scheme;
     proxy_set_header Authorization $http_authorization;
+    proxy_set_header X-Access-Token $http_x_access_token;
+    proxy_set_header Cookie $http_cookie;
     proxy_cache_bypass $http_upgrade;
     client_max_body_size 10M;
 }
@@ -326,22 +328,35 @@ Sau rebuild, chunk login phải có `baseURL:"/api"` — **không** có `localho
 Mở **Incognito** → F12 → Network → đăng nhập → request phải là:
 `https://esimviet.com/api/auth/login`
 
-### Vào Dashboard rồi bị đá về Login
+### Vào Dashboard rồi bị đá về Login / `No token provided`
 
-→ Thường do API `/api/admin/stats` trả 401 (header `Authorization` bị mất qua proxy).
+→ Header `Authorization` bị aaPanel/nginx làm mất. Code mới gửi token qua **3 kênh**: cookie + `X-Access-Token` + `Authorization`.
 
-1. Thêm vào aaPanel Nginx proxy config:
-   `proxy_set_header Authorization $http_authorization;`
-2. Rebuild frontend + restart nginx:
+1. Thêm vào aaPanel Nginx proxy config (`location /`):
+   ```nginx
+   proxy_set_header Authorization $http_authorization;
+   proxy_set_header X-Access-Token $http_x_access_token;
+   proxy_set_header Cookie $http_cookie;
+   ```
+2. Rebuild **cả backend và frontend**:
    ```bash
    cd /www/wwwroot/esimviet
    git pull origin cursor/esim-website-1575
-   docker compose build --no-cache frontend
-   docker compose up -d frontend
+   docker compose build --no-cache backend frontend
+   docker compose up -d backend frontend
    docker compose restart nginx
    nginx -t && nginx -s reload
    ```
-3. F12 → Network → kiểm tra request `/api/admin/stats` có header `Authorization: Bearer ...`
+3. **Đăng nhập lại** (Incognito) — login sẽ set cookie `admin_token`
+4. Test:
+   ```bash
+   curl -c /tmp/cj -X POST https://esimviet.com/api/auth/login \
+     -H "Content-Type: application/json" \
+     -d '{"username":"admin","password":"admin123"}'
+   curl -b /tmp/cj https://esimviet.com/api/auth/me
+   curl -b /tmp/cj https://esimviet.com/api/admin/stats
+   ```
+   Cả 3 phải trả `success:true`
 
 ### `git pull` không hoạt động
 
