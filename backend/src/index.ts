@@ -45,9 +45,23 @@ const authLimiter = rateLimit({
 });
 app.use('/api/auth/', authLimiter);
 
-// CORS
+// CORS – allow production domain + FRONTEND_URL
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  'http://localhost:3000',
+  'https://esimviet.com',
+  'https://www.esimviet.com',
+].filter(Boolean) as string[];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: (origin, callback) => {
+    // Same-origin requests (no Origin header) or allowed list
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(null, false);
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
