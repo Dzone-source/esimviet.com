@@ -1,6 +1,6 @@
 'use client';
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import api from '@/lib/api';
+import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
+import api, { setUnauthorizedHandler } from '@/lib/api';
 
 interface User {
   id: number;
@@ -18,36 +18,68 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+function isAdminRole(role?: string): boolean {
+  return role?.toLowerCase() === 'admin';
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const token = localStorage.getItem('admin_token');
-    if (token) {
-      api.get('/auth/me')
-        .then((res) => setUser(res.data.user))
-        .catch(() => localStorage.removeItem('admin_token'))
-        .finally(() => setLoading(false));
-    } else {
-      setLoading(false);
-    }
+  const clearSession = useCallback(() => {
+    localStorage.removeItem('admin_token');
+    setUser(null);
   }, []);
+
+  const logout = useCallback(() => {
+    clearSession();
+    window.location.href = '/admin/login';
+  }, [clearSession]);
+
+  useEffect(() => {
+    setUnauthorizedHandler(() => {
+      clearSession();
+    });
+
+    const token = localStorage.getItem('admin_token');
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+
+    api
+      .get('/auth/me')
+      .then((res) => setUser(res.data.user))
+      .catch((err) => {
+        // Only clear session on auth failure, not network blips
+        if (err.response?.status === 401) {
+          clearSession();
+        }
+      })
+      .finally(() => setLoading(false));
+
+    return () => {
+      setUnauthorizedHandler(null);
+    };
+  }, [clearSession]);
 
   const login = async (username: string, password: string) => {
     const res = await api.post('/auth/login', { username, password });
     const { token, user: userData } = res.data;
-    localStorage.setItem('admin_token', token);
+    localStorage.setItem('admin_token', String(token).trim());
     setUser(userData);
   };
 
-  const logout = () => {
-    localStorage.removeItem('admin_token');
-    setUser(null);
-  };
-
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, isAdmin: user?.role === 'admin' }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        login,
+        logout,
+        isAdmin: isAdminRole(user?.role),
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

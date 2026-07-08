@@ -208,6 +208,7 @@ location / {
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header Authorization $http_authorization;
     proxy_cache_bypass $http_upgrade;
     client_max_body_size 10M;
 }
@@ -324,6 +325,23 @@ Sau rebuild, chunk login phải có `baseURL:"/api"` — **không** có `localho
 
 Mở **Incognito** → F12 → Network → đăng nhập → request phải là:
 `https://esimviet.com/api/auth/login`
+
+### Vào Dashboard rồi bị đá về Login
+
+→ Thường do API `/api/admin/stats` trả 401 (header `Authorization` bị mất qua proxy).
+
+1. Thêm vào aaPanel Nginx proxy config:
+   `proxy_set_header Authorization $http_authorization;`
+2. Rebuild frontend + restart nginx:
+   ```bash
+   cd /www/wwwroot/esimviet
+   git pull origin cursor/esim-website-1575
+   docker compose build --no-cache frontend
+   docker compose up -d frontend
+   docker compose restart nginx
+   nginx -t && nginx -s reload
+   ```
+3. F12 → Network → kiểm tra request `/api/admin/stats` có header `Authorization: Bearer ...`
 
 ### `git pull` không hoạt động
 

@@ -2,6 +2,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import api from '@/lib/api';
+import { useAuth } from '@/context/AuthContext';
 import {
   ShoppingBag, DollarSign, Clock, CheckCircle, Globe, Package, TrendingUp, AlertCircle,
 } from 'lucide-react';
@@ -18,8 +19,11 @@ interface Stats {
 }
 
 export default function AdminDashboardPage() {
+  const { user, loading: authLoading } = useAuth();
+
   const { data: stats, isLoading } = useQuery({
     queryKey: ['admin-stats'],
+    enabled: !!user && !authLoading,
     queryFn: async () => {
       const res = await api.get('/admin/stats');
       return res.data.data as Stats;

@@ -1,44 +1,35 @@
 'use client';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter, usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import LoadingSpinner from '../common/LoadingSpinner';
 
 function hasAdminToken(): boolean {
   if (typeof window === 'undefined') return false;
-  return !!localStorage.getItem('admin_token');
+  return !!localStorage.getItem('admin_token')?.trim();
 }
 
 export default function AdminGuard({ children }: { children: React.ReactNode }) {
   const { user, loading, isAdmin } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
-  const [hasToken, setHasToken] = useState(false);
-
-  useEffect(() => {
-    setHasToken(hasAdminToken());
-  }, [user, loading]);
+  const authenticated = !!user && isAdmin;
+  const token = hasAdminToken();
 
   useEffect(() => {
     if (loading) return;
 
-    if (user && isAdmin && pathname === '/admin/login') {
+    if (authenticated && pathname === '/admin/login') {
       router.replace('/admin/dashboard');
       return;
     }
 
-    if (!user && !hasToken && pathname !== '/admin/login') {
-      router.replace('/admin/login');
-      return;
-    }
-
-    if (user && !isAdmin && pathname !== '/admin/login') {
+    if (!authenticated && !token && pathname !== '/admin/login') {
       router.replace('/admin/login');
     }
-  }, [user, loading, isAdmin, pathname, router, hasToken]);
+  }, [authenticated, loading, pathname, router, token]);
 
-  // Wait for /auth/me when token exists but user state not ready yet
-  if (loading || (hasToken && !user && pathname !== '/admin/login')) {
+  if (loading || (token && !user && pathname !== '/admin/login')) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <LoadingSpinner size="lg" />
@@ -50,7 +41,7 @@ export default function AdminGuard({ children }: { children: React.ReactNode }) 
     return <>{children}</>;
   }
 
-  if (!user || !isAdmin) {
+  if (!authenticated) {
     return null;
   }
 
