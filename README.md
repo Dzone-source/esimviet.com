@@ -22,7 +22,7 @@ A production-ready eSIM selling website built with Next.js 15, Express, and Mari
 | Auth | JWT + bcrypt |
 | Payment | PayPal REST API |
 | Email | Nodemailer |
-| Deployment | Ubuntu, Nginx, PM2 |
+| Deployment | Ubuntu, Nginx, PM2, **Docker** |
 
 ## Project Structure
 
@@ -97,6 +97,21 @@ Customer buys eSIM plan
 ```
 
 ## Deployment
+
+### Docker + aaPanel (recommended)
+
+```bash
+cp .env.docker.example .env
+# Edit .env with your domain, DB passwords, PayPal, SMTP
+chmod +x docker/start.sh
+./docker/start.sh
+```
+
+Then point aaPanel reverse proxy to `http://127.0.0.1:8080`.
+
+Full guide (Vietnamese): [docs/docker-aapanel.md](docs/docker-aapanel.md)
+
+### Manual (PM2 + Nginx)
 
 See [docs/deployment.md](docs/deployment.md) for full deployment instructions.
 
