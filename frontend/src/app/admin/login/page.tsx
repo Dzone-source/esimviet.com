@@ -1,6 +1,5 @@
 'use client';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import { useAuth } from '@/context/AuthContext';
@@ -29,7 +28,6 @@ export default function AdminLoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,10 +36,10 @@ export default function AdminLoginPage() {
     try {
       await login(username, password);
       toast.success('Welcome back!');
-      router.push('/admin/dashboard');
+      // Full navigation avoids race: router.push ran before React committed user state
+      window.location.href = '/admin/dashboard';
     } catch (error) {
       toast.error(getLoginErrorMessage(error));
-    } finally {
       setLoading(false);
     }
   };
