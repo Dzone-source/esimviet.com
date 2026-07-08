@@ -33,12 +33,13 @@ ENV PORT=4000
 COPY package*.json ./
 COPY prisma ./prisma/
 
-# Production deps + Prisma CLI + seed tooling
+# Production deps + Prisma CLI
 RUN npm ci --omit=dev \
-  && npm install prisma@5.22.0 ts-node@10.9.2 typescript@5.6.3 --no-save
+  && npm install prisma@5.22.0 --no-save
 
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY scripts ./scripts
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh \

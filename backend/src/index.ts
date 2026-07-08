@@ -19,6 +19,9 @@ import esimRoutes from './routes/esim';
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+// Behind Docker Nginx / aaPanel reverse proxy
+app.set('trust proxy', 1);
+
 // Security
 app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' },
