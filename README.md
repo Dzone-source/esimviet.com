@@ -195,9 +195,13 @@ npm run build           # outputs .next/
 npm start               # runs next start on port 3000
 ```
 
-For a full server deployment with **PM2 + Nginx** (Ubuntu), see
-[docs/deployment.md](docs/deployment.md). A sample PM2 config is provided in
-`ecosystem.config.js` and a sample Nginx site in `docs/nginx.conf`.
+## Production build
+
+For a full server deployment on **Ubuntu 24.04** with domain **esimviet.com**, see:
+
+**[docs/deploy-esimviet-ubuntu24.md](docs/deploy-esimviet-ubuntu24.md)** — complete VPS tutorial (Nginx, PM2, SSL, MariaDB).
+
+Quick reference: [docs/deployment.md](docs/deployment.md) · Nginx config: [docs/nginx-esimviet.conf](docs/nginx-esimviet.conf)
 
 ## Available npm scripts
 

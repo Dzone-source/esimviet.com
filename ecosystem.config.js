@@ -3,7 +3,7 @@ module.exports = {
     {
       name: 'esim-backend',
       script: './backend/dist/index.js',
-      cwd: '/var/www/esim',
+      cwd: '/var/www/esimviet.com',
       instances: 1,
       autorestart: true,
       watch: false,
@@ -20,7 +20,7 @@ module.exports = {
       name: 'esim-frontend',
       script: 'node_modules/.bin/next',
       args: 'start',
-      cwd: '/var/www/esim/frontend',
+      cwd: '/var/www/esimviet.com/frontend',
       instances: 1,
       autorestart: true,
       watch: false,
