@@ -26,7 +26,7 @@ export default function PlanPriceComparison({ plans }: PlanPriceComparisonProps)
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.45 }}
-      className="mb-10"
+      className="mb-0"
     >
       <div className="rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-primary-50 p-5 md:p-6 shadow-sm">
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between mb-5">

@@ -6,6 +6,7 @@ import BenefitsSection from '@/components/home/BenefitsSection';
 import HowItWorksSection from '@/components/home/HowItWorksSection';
 import DeviceCompatibilitySection from '@/components/home/DeviceCompatibilitySection';
 import HowToUseSection from '@/components/home/HowToUseSection';
+import VietnamPriceComparisonSection from '@/components/home/VietnamPriceComparisonSection';
 import TestimonialsSection from '@/components/home/TestimonialsSection';
 import FAQSection from '@/components/home/FAQSection';
 import CTASection from '@/components/home/CTASection';
@@ -25,6 +26,7 @@ export default function HomePage() {
       <HowItWorksSection />
       <DeviceCompatibilitySection />
       <HowToUseSection />
+      <VietnamPriceComparisonSection />
       <TestimonialsSection />
       <FAQSection />
       <CTASection />

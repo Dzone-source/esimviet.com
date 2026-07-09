@@ -122,7 +122,7 @@ export default function CountryPageClient({ slug }: Props) {
             </p>
             {maxSavings > 0 && (
               <p className="text-sm font-semibold text-emerald-600 mt-2">
-                Up to {maxSavings}% cheaper than Holafly & Airalo — compare price per day below.
+                Up to {maxSavings}% cheaper than Holafly & Airalo
               </p>
             )}
           </motion.div>
@@ -134,10 +134,7 @@ export default function CountryPageClient({ slug }: Props) {
               <p className="text-gray-400 text-sm">We're working on adding plans for {country.name}</p>
             </div>
           ) : (
-            <>
-              <PlanPriceComparison plans={plans} />
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
               {plans.map((plan, i) => (
                 <motion.div
                   key={plan.id}
@@ -153,8 +150,7 @@ export default function CountryPageClient({ slug }: Props) {
                   />
                 </motion.div>
               ))}
-              </div>
-            </>
+            </div>
           )}
         </div>
       </section>
@@ -162,6 +158,13 @@ export default function CountryPageClient({ slug }: Props) {
       <TravelTipsCard countryName={country.name} />
       <DeviceCompatibilitySection />
       <HowToUseSection />
+      {plans.length > 0 && (
+        <section className="section bg-surface-50 pt-0">
+          <div className="container">
+            <PlanPriceComparison plans={plans} />
+          </div>
+        </section>
+      )}
       <FAQSection />
     </div>
   );

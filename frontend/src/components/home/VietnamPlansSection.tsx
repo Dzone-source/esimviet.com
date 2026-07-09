@@ -6,7 +6,6 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 import api from '@/lib/api';
 import { getMaxSavingsAcrossPlans } from '@/lib/planPricing';
 import PlanCard from '../common/PlanCard';
-import PlanPriceComparison from '../common/PlanPriceComparison';
 import { PageLoader } from '../common/LoadingSpinner';
 import type { Country } from '@/types';
 
@@ -45,7 +44,7 @@ export default function VietnamPlansSection() {
           </p>
           {maxSavings > 0 && (
             <p className="text-sm font-semibold text-emerald-600 mt-3">
-              Up to {maxSavings}% cheaper than other travel eSIMs — see price per day below.
+              Up to {maxSavings}% cheaper than other travel eSIMs
             </p>
           )}
         </motion.div>
@@ -56,8 +55,6 @@ export default function VietnamPlansSection() {
           <p className="text-center text-gray-500">Plans coming soon.</p>
         ) : (
           <>
-            <PlanPriceComparison plans={plans} />
-
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {plans.map((plan, i) => (
                 <motion.div
