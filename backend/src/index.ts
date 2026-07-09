@@ -1,9 +1,13 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
+import path from 'path';
+
+// Load backend/.env regardless of PM2 cwd (project root vs backend/)
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
+
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
-import path from 'path';
 import { rateLimit } from 'express-rate-limit';
 import { errorHandler } from './middleware/errorHandler';
 import { logger } from './utils/logger';

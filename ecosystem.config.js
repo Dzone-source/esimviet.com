@@ -2,8 +2,8 @@ module.exports = {
   apps: [
     {
       name: 'esim-backend',
-      script: './backend/dist/index.js',
-      cwd: '/var/www/esimviet.com',
+      script: './dist/index.js',
+      cwd: '/var/www/esimviet.com/backend',
       instances: 1,
       autorestart: true,
       watch: false,
