@@ -19,7 +19,8 @@ import esimRoutes from './routes/esim';
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// Behind Docker Nginx / aaPanel reverse proxy
+// Trust the first proxy hop when running behind a reverse proxy (Nginx, etc.).
+// Harmless for local development where the API is reached directly.
 app.set('trust proxy', 1);
 
 // Security

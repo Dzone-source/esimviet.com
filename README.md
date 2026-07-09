@@ -1,6 +1,7 @@
 # eSIM Global – Production eSIM Selling Platform
 
 A production-ready eSIM selling website built with Next.js 15, Express, and MariaDB.
+Runs natively on your local machine with Node.js, npm and MariaDB — no Docker required.
 
 ## Features
 
@@ -22,7 +23,7 @@ A production-ready eSIM selling website built with Next.js 15, Express, and Mari
 | Auth | JWT + bcrypt |
 | Payment | PayPal REST API |
 | Email | Nodemailer |
-| Deployment | Ubuntu, Nginx, PM2, **Docker** |
+| Deployment | Ubuntu, Nginx, PM2 |
 
 ## Project Structure
 
@@ -42,47 +43,99 @@ A production-ready eSIM selling website built with Next.js 15, Express, and Mari
 │   │   ├── middleware/# Auth, upload
 │   │   └── utils/     # Logger, Prisma
 │   └── prisma/        # Schema & seed
-├── docs/              # Deployment docs
-└── ecosystem.config.js# PM2 config
+├── database/          # init.sql (create DB + user)
+├── docs/              # Deployment docs (PM2 + Nginx)
+└── ecosystem.config.js# PM2 config (production)
 ```
 
-## Quick Start
+## Requirements
 
-### Prerequisites
+Install these natively on your machine (no containers):
 
-- Node.js 20+
-- MariaDB 10.11+
+- **Node.js 20+** (LTS recommended) and **npm 10+**
+- **MariaDB 10.11+** (or a compatible MySQL 8+)
 
-### 1. Backend Setup
+Verify:
+
+```bash
+node -v      # v20.x or newer
+npm -v       # 10.x or newer
+mariadb --version
+```
+
+## 1. Clone & install
+
+```bash
+git clone <repo-url> esim
+cd esim
+```
+
+## 2. Database setup
+
+Start your local MariaDB server, then create the database and user. You can use
+the provided script (edit the password inside first):
+
+```bash
+sudo mariadb < database/init.sql
+```
+
+Or run the SQL manually:
+
+```sql
+CREATE DATABASE esim_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'esim_user'@'localhost' IDENTIFIED BY 'change_this_password';
+GRANT ALL PRIVILEGES ON esim_db.* TO 'esim_user'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+## 3. Environment configuration
+
+The project loads two env files. Copy the examples and fill in real values:
+
+```bash
+# Backend
+cp backend/.env.example backend/.env
+
+# Frontend
+cp frontend/.env.local.example frontend/.env.local
+```
+
+Update `backend/.env` → `DATABASE_URL` to match the DB/user/password you created,
+e.g. `mysql://esim_user:change_this_password@localhost:3306/esim_db`.
+
+> A consolidated reference of every variable lives in the root `.env.example`.
+
+## 4. Backend setup & run
 
 ```bash
 cd backend
 npm install
-cp .env.example .env
-# Edit .env with your credentials
 npx prisma generate
-npx prisma db push
-npm run seed
-npm run dev
+npx prisma db push      # create tables from the Prisma schema
+npm run seed            # seed admin user + demo data
+npm run dev             # starts on http://localhost:4000
 ```
 
-### 2. Frontend Setup
+## 5. Frontend setup & run
+
+In a second terminal:
 
 ```bash
 cd frontend
 npm install
-cp .env.local.example .env.local
-# Edit .env.local
-npm run dev
+npm run dev             # starts on http://localhost:3000
 ```
 
-### 3. Access
+## 6. Access
 
 - Frontend: http://localhost:3000
 - Admin panel: http://localhost:3000/admin/login
   - Username: `admin`
-  - Password: `admin123`
+  - Password: `admin123`  *(change it after first login)*
 - Backend API: http://localhost:4000
+
+In development the frontend proxies `/api/*` to `NEXT_PUBLIC_API_URL`
+(default `http://localhost:4000`), so no CORS setup is needed.
 
 ## Order Workflow
 
@@ -96,31 +149,56 @@ Customer buys eSIM plan
 → Order status: Completed
 ```
 
-## Deployment
+## Production build
 
-### Docker + aaPanel (recommended)
+Build both apps for production:
 
 ```bash
-cp .env.docker.example .env
-# Edit .env with your domain, DB passwords, PayPal, SMTP
-chmod +x docker/start.sh
-./docker/start.sh
+# Backend – compile TypeScript to dist/
+cd backend
+npm run build           # outputs dist/
+npm start               # runs node dist/index.js
+
+# Frontend – build the Next.js app
+cd ../frontend
+npm run build           # outputs .next/
+npm start               # runs next start on port 3000
 ```
 
-Then point aaPanel reverse proxy to `http://127.0.0.1:8080`.
+For a full server deployment with **PM2 + Nginx** (Ubuntu), see
+[docs/deployment.md](docs/deployment.md). A sample PM2 config is provided in
+`ecosystem.config.js` and a sample Nginx site in `docs/nginx.conf`.
 
-Full guide (Vietnamese): [docs/docker-aapanel.md](docs/docker-aapanel.md)
+## Available npm scripts
 
-### Manual (PM2 + Nginx)
+### Backend (`backend/`)
 
-See [docs/deployment.md](docs/deployment.md) for full deployment instructions.
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Start API in watch mode (ts-node-dev) |
+| `npm run build` | Compile TypeScript to `dist/` |
+| `npm start` | Run compiled server (`dist/index.js`) |
+| `npm run seed` | Seed admin user + demo data |
+| `npm run reset-admin` | Reset the admin password |
+| `npm run prisma:push` | Push Prisma schema to the database |
+| `npm run prisma:studio` | Open Prisma Studio |
+
+### Frontend (`frontend/`)
+
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Start Next.js dev server |
+| `npm run build` | Production build |
+| `npm start` | Serve the production build |
+| `npm run lint` | Run ESLint |
 
 ## Environment Variables
 
-### Backend
+### Backend (`backend/.env`)
 
 | Variable | Description |
 |----------|-------------|
+| `PORT` | API port (default `4000`) |
 | `DATABASE_URL` | MariaDB connection string |
 | `JWT_SECRET` | Secret key for JWT tokens |
 | `PAYPAL_CLIENT_ID` | PayPal REST API client ID |
@@ -130,11 +208,14 @@ See [docs/deployment.md](docs/deployment.md) for full deployment instructions.
 | `SMTP_USER` | SMTP username/email |
 | `SMTP_PASS` | SMTP password |
 | `FRONTEND_URL` | Frontend URL for CORS |
+| `UPLOAD_DIR` | Directory for uploaded files |
 
-### Frontend
+### Frontend (`frontend/.env.local`)
 
 | Variable | Description |
 |----------|-------------|
 | `NEXT_PUBLIC_API_URL` | Backend API URL |
 | `NEXT_PUBLIC_PAYPAL_CLIENT_ID` | PayPal client ID |
 | `NEXT_PUBLIC_SITE_URL` | Public site URL for SEO |
+| `NEXT_PUBLIC_SITE_NAME` | Site name |
+| `NEXT_PUBLIC_FB_MESSENGER` | Facebook page ID (optional) |
