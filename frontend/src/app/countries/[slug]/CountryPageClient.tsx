@@ -4,7 +4,9 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowLeft, MapPin, Wifi } from 'lucide-react';
 import api from '@/lib/api';
+import { getMaxSavingsAcrossPlans } from '@/lib/planPricing';
 import PlanCard from '@/components/common/PlanCard';
+import PlanPriceComparison from '@/components/common/PlanPriceComparison';
 import { PageLoader } from '@/components/common/LoadingSpinner';
 import FAQSection from '@/components/home/FAQSection';
 import DeviceCompatibilitySection from '@/components/home/DeviceCompatibilitySection';
@@ -62,6 +64,7 @@ export default function CountryPageClient({ slug }: Props) {
 
   const plans = country.plans || [];
   const featuredIndex = plans.length > 1 ? Math.floor(plans.length / 2) : -1;
+  const maxSavings = getMaxSavingsAcrossPlans(plans);
 
   return (
     <div className="pt-16">
@@ -117,6 +120,11 @@ export default function CountryPageClient({ slug }: Props) {
             <p className="text-gray-500">
               All plans include 4G/LTE data with hotspot sharing. Choose the one that fits your trip.
             </p>
+            {maxSavings > 0 && (
+              <p className="text-sm font-semibold text-emerald-600 mt-2">
+                Up to {maxSavings}% cheaper than Holafly & Airalo — compare price per day below.
+              </p>
+            )}
           </motion.div>
 
           {plans.length === 0 ? (
@@ -126,7 +134,10 @@ export default function CountryPageClient({ slug }: Props) {
               <p className="text-gray-400 text-sm">We're working on adding plans for {country.name}</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            <>
+              <PlanPriceComparison plans={plans} />
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
               {plans.map((plan, i) => (
                 <motion.div
                   key={plan.id}
@@ -142,7 +153,8 @@ export default function CountryPageClient({ slug }: Props) {
                   />
                 </motion.div>
               ))}
-            </div>
+              </div>
+            </>
           )}
         </div>
       </section>
