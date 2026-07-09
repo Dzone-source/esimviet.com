@@ -3,7 +3,7 @@ import { body, validationResult } from 'express-validator';
 import { prisma } from '../utils/prisma';
 import { createError } from '../middleware/errorHandler';
 import { capturePayPalOrder, verifyPayPalOrder } from '../services/paypal';
-import { sendOrderConfirmationEmail } from '../services/email';
+import { sendOrderConfirmationEmail, sendAdminPaymentNotificationEmail } from '../services/email';
 import { logger } from '../utils/logger';
 
 const router = Router();
@@ -73,22 +73,40 @@ router.post(
         },
       });
 
-      // Send confirmation email
+      // Send confirmation email to customer + notification to admin
       try {
-        const item = order.order_items[0];
-        await sendOrderConfirmationEmail({
-          orderNumber: order.order_number,
-          customerName: order.customer_name,
-          customerEmail: order.customer_email,
+        const paidAt = updatedOrder.paid_at || new Date();
+        const emailItems = order.order_items.map((item) => ({
           planTitle: item.plan.title,
           countryName: item.plan.country.name,
           days: item.plan.days,
           dataAmount: item.plan.data_amount,
-          total: parseFloat(order.total.toString()),
           quantity: item.qty,
+          price: parseFloat(item.price.toString()) * item.qty,
+        }));
+
+        await sendOrderConfirmationEmail({
+          orderNumber: order.order_number,
+          customerName: order.customer_name,
+          customerEmail: order.customer_email,
+          planTitle: order.order_items[0].plan.title,
+          countryName: order.order_items[0].plan.country.name,
+          days: order.order_items[0].plan.days,
+          dataAmount: order.order_items[0].plan.data_amount,
+          total: parseFloat(order.total.toString()),
+          quantity: order.order_items[0].qty,
+        });
+
+        await sendAdminPaymentNotificationEmail({
+          orderNumber: order.order_number,
+          customerName: order.customer_name,
+          customerEmail: order.customer_email,
+          total: parseFloat(order.total.toString()),
+          paidAt,
+          items: emailItems,
         });
       } catch (emailError) {
-        logger.error('Failed to send confirmation email:', emailError);
+        logger.error('Failed to send payment notification emails:', emailError);
       }
 
       res.json({

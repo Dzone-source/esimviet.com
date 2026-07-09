@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import { prisma } from '../utils/prisma';
 import { logger } from '../utils/logger';
 
 const transporter = nodemailer.createTransport({
@@ -35,6 +36,39 @@ export interface EsimDeliveryData {
   activationCode: string;
   manualCode?: string;
   qrImagePath?: string;
+}
+
+export interface AdminPaymentNotificationData {
+  orderNumber: string;
+  customerName: string;
+  customerEmail: string;
+  total: number;
+  paidAt: Date;
+  items: Array<{
+    planTitle: string;
+    countryName: string;
+    days: number;
+    dataAmount: string;
+    quantity: number;
+    price: number;
+  }>;
+}
+
+async function resolveAdminNotificationEmail(): Promise<string | null> {
+  if (process.env.ADMIN_NOTIFICATION_EMAIL?.trim()) {
+    return process.env.ADMIN_NOTIFICATION_EMAIL.trim();
+  }
+
+  const contactSetting = await prisma.setting.findUnique({ where: { key: 'contact_email' } });
+  if (contactSetting?.value?.trim()) {
+    return contactSetting.value.trim();
+  }
+
+  return process.env.SMTP_USER?.trim() || null;
+}
+
+function getMailFromAddress(): string {
+  return `"${process.env.EMAIL_FROM_NAME || 'eSIM Store'}" <${process.env.EMAIL_FROM || process.env.SMTP_USER}>`;
 }
 
 export async function sendOrderConfirmationEmail(data: OrderEmailData): Promise<void> {
@@ -118,13 +152,133 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData): Promise<
   `;
 
   await transporter.sendMail({
-    from: `"${process.env.EMAIL_FROM_NAME || 'eSIM Store'}" <${process.env.EMAIL_FROM || process.env.SMTP_USER}>`,
+    from: getMailFromAddress(),
     to: data.customerEmail,
     subject: `Order Confirmed #${data.orderNumber} – Your eSIM is being prepared`,
     html,
   });
 
   logger.info(`Order confirmation email sent to ${data.customerEmail}`);
+}
+
+export async function sendAdminPaymentNotificationEmail(
+  data: AdminPaymentNotificationData
+): Promise<void> {
+  const adminEmail = await resolveAdminNotificationEmail();
+
+  if (!adminEmail) {
+    logger.warn('Admin payment notification skipped: no ADMIN_NOTIFICATION_EMAIL, contact_email, or SMTP_USER configured');
+    return;
+  }
+
+  const adminOrdersUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/admin/orders`;
+  const paidAtLabel = data.paidAt.toLocaleString('en-US', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+    timeZone: 'UTC',
+  });
+
+  const itemsHtml = data.items
+    .map(
+      (item) => `
+        <div class="detail-row">
+          <span class="detail-label">${item.planTitle}</span>
+          <span class="detail-value">${item.countryName} · ${item.days} days · ${item.dataAmount} · x${item.quantity} · $${item.price.toFixed(2)}</span>
+        </div>
+      `
+    )
+    .join('');
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Paid Order</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f7; margin: 0; padding: 0; }
+    .container { max-width: 600px; margin: 40px auto; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+    .header { background: linear-gradient(135deg, #f59e0b, #d97706); padding: 32px 40px; text-align: center; }
+    .header h1 { color: #fff; margin: 0; font-size: 24px; font-weight: 700; }
+    .header p { color: rgba(255,255,255,0.9); margin: 8px 0 0; font-size: 14px; }
+    .body { padding: 32px 40px; }
+    .order-badge { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 12px; padding: 20px; margin-bottom: 24px; text-align: center; }
+    .order-number { font-size: 22px; font-weight: 700; color: #c2410c; letter-spacing: 1px; }
+    .details { background: #f9fafb; border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+    .details h3 { margin: 0 0 16px; color: #1a1a2e; font-size: 16px; }
+    .detail-row { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid #e5e7eb; }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-label { color: #374151; font-weight: 600; }
+    .detail-value { color: #6b7280; text-align: right; }
+    .total { font-size: 20px; font-weight: 700; color: #c2410c; }
+    .notice { background: #eff6ff; border-radius: 12px; padding: 20px; margin-bottom: 24px; }
+    .notice p { margin: 0; color: #1d4ed8; font-size: 14px; line-height: 1.5; }
+    .button { display: inline-block; background: #0070f3; color: #fff !important; text-decoration: none; padding: 12px 20px; border-radius: 10px; font-weight: 600; }
+    .footer { text-align: center; padding: 24px 40px; background: #f9fafb; color: #6b7280; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>💰 New Paid Order</h1>
+      <p>A customer completed payment successfully</p>
+    </div>
+    <div class="body">
+      <div class="order-badge">
+        <div style="color: #6b7280; font-size: 13px; margin-bottom: 4px;">Order Number</div>
+        <div class="order-number">${data.orderNumber}</div>
+      </div>
+
+      <div class="details">
+        <h3>Customer</h3>
+        <div class="detail-row">
+          <span class="detail-label">Name</span>
+          <span class="detail-value">${data.customerName}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Email</span>
+          <span class="detail-value">${data.customerEmail}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Paid at</span>
+          <span class="detail-value">${paidAtLabel} UTC</span>
+        </div>
+      </div>
+
+      <div class="details">
+        <h3>Order Items</h3>
+        ${itemsHtml}
+        <div class="detail-row">
+          <span class="detail-label">Total paid</span>
+          <span class="detail-value total">$${data.total.toFixed(2)}</span>
+        </div>
+      </div>
+
+      <div class="notice">
+        <p><strong>Action required:</strong> Upload the eSIM QR code in admin so the customer receives their activation email.</p>
+      </div>
+
+      <p style="text-align: center; margin: 0;">
+        <a href="${adminOrdersUrl}" class="button">Open Admin Orders</a>
+      </p>
+    </div>
+    <div class="footer">
+      <p>Automated notification from eSIM Viet</p>
+    </div>
+  </div>
+</body>
+</html>
+  `;
+
+  await transporter.sendMail({
+    from: getMailFromAddress(),
+    to: adminEmail,
+    subject: `New paid order #${data.orderNumber} – $${data.total.toFixed(2)}`,
+    html,
+  });
+
+  logger.info(`Admin payment notification sent to ${adminEmail} for order ${data.orderNumber}`);
 }
 
 export async function sendEsimDeliveryEmail(data: EsimDeliveryData): Promise<void> {
@@ -220,7 +374,7 @@ export async function sendEsimDeliveryEmail(data: EsimDeliveryData): Promise<voi
   `;
 
   const mailOptions: nodemailer.SendMailOptions = {
-    from: `"${process.env.EMAIL_FROM_NAME || 'eSIM Store'}" <${process.env.EMAIL_FROM || process.env.SMTP_USER}>`,
+    from: getMailFromAddress(),
     to: data.customerEmail,
     subject: `Your eSIM for ${data.countryName} is Ready! Order #${data.orderNumber}`,
     html,
