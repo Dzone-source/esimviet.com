@@ -22,7 +22,8 @@ export default function Navbar() {
 
   const navLinks = [
     { href: '/countries/vietnam', label: 'Vietnam Plans' },
-    { href: '/blog', label: 'Guides' },
+    { href: '/#device-compatibility', label: 'Device Check' },
+    { href: '/#how-to-use', label: 'How to Use' },
     { href: '/contact', label: 'Support' },
   ];
 

@@ -95,6 +95,8 @@ export default function Footer() {
             <ul className="space-y-2">
               {[
                 { name: 'How it Works', href: '/#how-it-works' },
+                { name: 'Device Compatibility', href: '/#device-compatibility' },
+                { name: 'How to Use', href: '/#how-to-use' },
                 { name: 'FAQ', href: '/#faq' },
                 { name: 'Privacy Policy', href: '/privacy' },
                 { name: 'Terms of Service', href: '/terms' },

@@ -2,11 +2,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowLeft, MapPin, Wifi, Check, Info } from 'lucide-react';
+import { ArrowLeft, MapPin, Wifi } from 'lucide-react';
 import api from '@/lib/api';
 import PlanCard from '@/components/common/PlanCard';
 import { PageLoader } from '@/components/common/LoadingSpinner';
 import FAQSection from '@/components/home/FAQSection';
+import DeviceCompatibilitySection from '@/components/home/DeviceCompatibilitySection';
+import HowToUseSection from '@/components/home/HowToUseSection';
 import type { Country } from '@/types';
 
 interface Props { slug: string; }
@@ -17,6 +19,23 @@ const TRAVEL_TIPS = [
   'Capital: Hanoi | Major city: Ho Chi Minh City',
   'Known for: Ha Long Bay, Ancient Hoi An, delicious street food',
 ];
+
+function TravelTipsCard({ countryName }: { countryName: string }) {
+  return (
+    <section className="section bg-surface-50 pt-0">
+      <div className="container max-w-3xl">
+        <div className="bg-white rounded-2xl p-6 shadow-card border border-surface-200">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Travel Tips for {countryName}</h3>
+          <ul className="space-y-2">
+            {TRAVEL_TIPS.map((tip) => (
+              <li key={tip} className="text-gray-600 text-sm">• {tip}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function CountryPageClient({ slug }: Props) {
   const { data: country, isLoading, isError } = useQuery({
@@ -42,7 +61,6 @@ export default function CountryPageClient({ slug }: Props) {
   }
 
   const plans = country.plans || [];
-  const tips = TRAVEL_TIPS;
   const featuredIndex = plans.length > 1 ? Math.floor(plans.length / 2) : -1;
 
   return (
@@ -129,69 +147,9 @@ export default function CountryPageClient({ slug }: Props) {
         </div>
       </section>
 
-      {/* Info + Travel Tips */}
-      <section className="section bg-surface-50">
-        <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* How to install */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="bg-white rounded-2xl p-6 shadow-card border border-surface-200"
-            >
-              <h3 className="text-xl font-bold text-gray-900 mb-5 flex items-center gap-2">
-                <Wifi className="w-5 h-5 text-primary-600" />
-                How to Install Your eSIM
-              </h3>
-              <ol className="space-y-4">
-                {[
-                  'Purchase your plan and complete payment via PayPal',
-                  'Receive QR code and activation instructions via email (within 24h)',
-                  'Go to Settings → Mobile Data → Add eSIM on your phone',
-                  'Scan the QR code or enter the activation code manually',
-                  'Your eSIM activates automatically upon arrival in ' + country.name,
-                ].map((step, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <span className="w-6 h-6 bg-primary-600 text-white text-xs font-bold rounded-full flex items-center justify-center shrink-0 mt-0.5">
-                      {i + 1}
-                    </span>
-                    <span className="text-gray-600 text-sm leading-relaxed">{step}</span>
-                  </li>
-                ))}
-              </ol>
-            </motion.div>
-
-            {/* Travel Tips */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="bg-white rounded-2xl p-6 shadow-card border border-surface-200"
-            >
-              <h3 className="text-xl font-bold text-gray-900 mb-5 flex items-center gap-2">
-                <Info className="w-5 h-5 text-primary-600" />
-                Travel Tips for {country.name}
-              </h3>
-              <ul className="space-y-3">
-                {tips.map((tip, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <Check className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
-                    <span className="text-gray-600 text-sm">{tip}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="mt-6 p-4 bg-primary-50 rounded-xl">
-                <p className="text-primary-700 text-sm">
-                  <strong>📱 eSIM Tip:</strong> Install your eSIM before you travel. The data plan activates automatically when you arrive in {country.name}.
-                </p>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
+      <TravelTipsCard countryName={country.name} />
+      <DeviceCompatibilitySection />
+      <HowToUseSection />
       <FAQSection />
     </div>
   );

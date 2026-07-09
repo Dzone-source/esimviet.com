@@ -4,6 +4,8 @@ import HeroSection from '@/components/home/HeroSection';
 import VietnamPlansSection from '@/components/home/VietnamPlansSection';
 import BenefitsSection from '@/components/home/BenefitsSection';
 import HowItWorksSection from '@/components/home/HowItWorksSection';
+import DeviceCompatibilitySection from '@/components/home/DeviceCompatibilitySection';
+import HowToUseSection from '@/components/home/HowToUseSection';
 import TestimonialsSection from '@/components/home/TestimonialsSection';
 import FAQSection from '@/components/home/FAQSection';
 import CTASection from '@/components/home/CTASection';
@@ -21,6 +23,8 @@ export default function HomePage() {
       <VietnamPlansSection />
       <BenefitsSection />
       <HowItWorksSection />
+      <DeviceCompatibilitySection />
+      <HowToUseSection />
       <TestimonialsSection />
       <FAQSection />
       <CTASection />

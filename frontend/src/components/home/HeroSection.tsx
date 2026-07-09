@@ -62,10 +62,10 @@ export default function HeroSection() {
               View Vietnam Plans
             </button>
             <button
-              onClick={() => router.push('/#how-it-works')}
+              onClick={() => router.push('/#device-compatibility')}
               className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-semibold px-8 py-4 rounded-2xl transition-all duration-200"
             >
-              How It Works
+              Check Device Compatible
             </button>
           </motion.div>
 
