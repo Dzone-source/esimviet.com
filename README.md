@@ -72,8 +72,25 @@ cd esim
 
 ## 2. Database setup
 
-Start your local MariaDB server, then create the database and user. You can use
-the provided script (edit the password inside first):
+**MariaDB must be installed and running** before Prisma can connect. If you see
+`P1001: Can't reach database server at localhost:3306`, the server is not started.
+
+Install and start (Ubuntu/Debian example):
+
+```bash
+sudo apt install mariadb-server
+sudo service mariadb start
+mariadb -e "SELECT VERSION();"   # should print a version, not an error
+```
+
+Create the database and user:
+
+```bash
+chmod +x scripts/setup-local-db.sh
+./scripts/setup-local-db.sh
+```
+
+Or apply the SQL directly:
 
 ```bash
 sudo mariadb < database/init.sql
