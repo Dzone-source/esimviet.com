@@ -26,6 +26,16 @@ function attachAuthHeader(config: InternalAxiosRequestConfig): InternalAxiosRequ
     setHeader(config, 'Authorization', `Bearer ${token}`);
     setHeader(config, 'X-Access-Token', token);
   }
+
+  // Let the browser set multipart boundary — do not force application/json on FormData
+  if (config.data instanceof FormData) {
+    if (typeof config.headers.delete === 'function') {
+      config.headers.delete('Content-Type');
+    } else {
+      delete (config.headers as Record<string, string>)['Content-Type'];
+    }
+  }
+
   return config;
 }
 
