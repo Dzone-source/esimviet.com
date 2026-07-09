@@ -75,12 +75,25 @@ cd esim
 **MariaDB must be installed and running** before Prisma can connect. If you see
 `P1001: Can't reach database server at localhost:3306`, the server is not started.
 
+### Quick setup (from repo root — recommended)
+
+```bash
+sudo apt install mariadb-server   # once, if not installed
+chmod +x scripts/setup-local.sh
+./scripts/setup-local.sh
+```
+
+This starts MariaDB, creates `esim_db`, copies env files, runs `prisma db push`,
+and seeds admin data. **Run Prisma/npm commands from `backend/`**, not the repo root.
+
+### Manual setup
+
 Install and start (Ubuntu/Debian example):
 
 ```bash
 sudo apt install mariadb-server
 sudo service mariadb start
-mariadb -e "SELECT VERSION();"   # should print a version, not an error
+mariadb -e "SELECT VERSION();"   # may require: sudo mariadb -e "SELECT VERSION();"
 ```
 
 Create the database and user:
