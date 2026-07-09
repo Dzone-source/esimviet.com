@@ -11,32 +11,11 @@ import type { Country } from '@/types';
 
 interface Props { slug: string; }
 
-const TRAVEL_TIPS: Record<string, string[]> = {
-  vietnam: [
-    'Best time to visit: March–April and September–November',
-    'Currency: Vietnamese Dong (VND)',
-    'Capital: Hanoi | Major city: Ho Chi Minh City',
-    'Known for: Ha Long Bay, Ancient Hoi An, delicious street food',
-  ],
-  japan: [
-    'Best time to visit: March–May (cherry blossom) and September–November',
-    'Currency: Japanese Yen (JPY)',
-    'Capital: Tokyo',
-    'Known for: Mount Fuji, ancient temples, technology and anime culture',
-  ],
-  thailand: [
-    'Best time to visit: November–February (cool season)',
-    'Currency: Thai Baht (THB)',
-    'Capital: Bangkok',
-    'Known for: Temples, street food, beautiful beaches, and nightlife',
-  ],
-};
-
-const DEFAULT_TIPS = [
-  'Check local emergency numbers before arrival',
-  'Download offline maps for navigation',
-  'Keep important documents in a digital backup',
-  'Get travel insurance for your trip',
+const TRAVEL_TIPS = [
+  'Best time to visit: March–April and September–November',
+  'Currency: Vietnamese Dong (VND)',
+  'Capital: Hanoi | Major city: Ho Chi Minh City',
+  'Known for: Ha Long Bay, Ancient Hoi An, delicious street food',
 ];
 
 export default function CountryPageClient({ slug }: Props) {
@@ -56,14 +35,14 @@ export default function CountryPageClient({ slug }: Props) {
         <div className="text-center">
           <div className="text-6xl mb-4">🌍</div>
           <h1 className="text-2xl font-bold text-gray-800 mb-2">Country not found</h1>
-          <Link href="/countries" className="btn-primary mt-4">Browse All Countries</Link>
+          <Link href="/countries/vietnam" className="btn-primary mt-4">View Vietnam Plans</Link>
         </div>
       </div>
     );
   }
 
   const plans = country.plans || [];
-  const tips = TRAVEL_TIPS[slug] || DEFAULT_TIPS;
+  const tips = TRAVEL_TIPS;
   const featuredIndex = plans.length > 1 ? Math.floor(plans.length / 2) : -1;
 
   return (
@@ -77,11 +56,11 @@ export default function CountryPageClient({ slug }: Props) {
 
         <div className="container relative z-10">
           <Link
-            href="/countries"
+            href="/"
             className="inline-flex items-center gap-2 text-white/70 hover:text-white text-sm mb-6 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to Countries
+            Back to Home
           </Link>
 
           <motion.div

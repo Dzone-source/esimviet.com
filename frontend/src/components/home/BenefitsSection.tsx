@@ -11,8 +11,8 @@ const BENEFITS = [
   },
   {
     icon: Globe2,
-    title: '100+ Countries',
-    description: 'Extensive coverage across Asia, Europe, Americas and beyond with local network partnerships.',
+    title: 'Vietnam Coverage',
+    description: 'Reliable 4G/5G data across Vietnam — Hanoi, Ho Chi Minh City, Da Nang, and beyond.',
     color: 'bg-purple-50 text-purple-600',
   },
   {
@@ -58,7 +58,7 @@ export default function BenefitsSection() {
             The Smart Way to Stay Connected
           </h2>
           <p className="text-gray-500 max-w-lg mx-auto">
-            We make international connectivity simple, affordable and reliable for every traveler.
+            We make Vietnam connectivity simple, affordable and reliable for every traveler.
           </p>
         </motion.div>
 

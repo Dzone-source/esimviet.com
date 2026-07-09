@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 import MainLayout from '@/components/layout/MainLayout';
 import CountryPageClient from './CountryPageClient';
 
@@ -8,23 +9,26 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const name = slug
-    .split('-')
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(' ');
+  if (slug !== 'vietnam') {
+    return { title: 'Vietnam eSIM Plans' };
+  }
 
   return {
-    title: `${name} eSIM – Affordable Data Plans`,
-    description: `Buy eSIM for ${name}. 4G/5G data plans with hotspot. Stay connected during your ${name} trip.`,
+    title: 'Vietnam eSIM Plans – Affordable Data for Travelers',
+    description: 'Buy Vietnam eSIM online. 4G/5G data plans with hotspot. QR code delivered by email within 24 hours.',
     openGraph: {
-      title: `${name} eSIM Plans – eSIM Global`,
-      description: `Affordable eSIM plans for ${name}. Fast 4G/5G, hotspot included.`,
+      title: 'Vietnam eSIM Plans – eSIM Viet',
+      description: 'Affordable Vietnam eSIM plans. Fast 4G/5G, hotspot included.',
     },
   };
 }
 
 export default async function CountryPage({ params }: Props) {
   const { slug } = await params;
+  if (slug !== 'vietnam') {
+    redirect('/countries/vietnam');
+  }
+
   return (
     <MainLayout>
       <CountryPageClient slug={slug} />

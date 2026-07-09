@@ -1,6 +1,6 @@
-# eSIM Global – Production eSIM Selling Platform
+# eSIM Viet – Vietnam eSIM Selling Platform
 
-A production-ready eSIM selling website built with Next.js 15, Express, and MariaDB.
+A production-ready **Vietnam eSIM** selling website built with Next.js 15, Express, and MariaDB.
 Runs natively on your local machine with Node.js, npm and MariaDB — no Docker required.
 
 ## Features

@@ -4,33 +4,24 @@ import Link from 'next/link';
 import { ArrowRight, BookOpen } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Travel Guides & Blog – eSIM Global',
-  description: 'Travel tips, eSIM guides, and destination insights for globetrotters.',
+  title: 'Vietnam eSIM Guides – eSIM Viet',
+  description: 'Vietnam travel tips, eSIM setup guides, and connectivity advice for visitors.',
 };
 
 const POSTS = [
   {
     slug: 'how-to-install-esim',
-    title: 'How to Install an eSIM: Complete Step-by-Step Guide',
-    excerpt: 'Learn how to install and activate your eSIM on iPhone and Android devices in just a few minutes.',
+    title: 'How to Install a Vietnam eSIM: Step-by-Step Guide',
+    excerpt: 'Learn how to install and activate your Vietnam eSIM on iPhone and Android before you travel.',
     category: 'Guide',
     date: '2024-01-15',
     readTime: '5 min',
     emoji: '📱',
   },
   {
-    slug: 'best-esim-for-japan',
-    title: 'Best eSIM for Japan Travel 2024: Everything You Need to Know',
-    excerpt: "Japan has excellent 4G/5G coverage. Here's how to choose the right eSIM plan for your Japanese adventure.",
-    category: 'Destination',
-    date: '2024-01-10',
-    readTime: '7 min',
-    emoji: '🗾',
-  },
-  {
     slug: 'esim-vs-sim-card',
-    title: 'eSIM vs Physical SIM Card: Which is Better for Travel?',
-    excerpt: 'Compare eSIM and physical SIM cards to decide which is the best option for international travel.',
+    title: 'eSIM vs Physical SIM Card for Vietnam Travel',
+    excerpt: 'Compare eSIM and physical SIM cards to decide the best option for your Vietnam trip.',
     category: 'Guide',
     date: '2024-01-05',
     readTime: '6 min',
@@ -39,8 +30,8 @@ const POSTS = [
   {
     slug: 'vietnam-travel-tips',
     title: 'Vietnam Travel Guide: Best Tips for First-Time Visitors',
-    excerpt: "Everything you need to know before visiting Vietnam – from connectivity to culture and cuisine.",
-    category: 'Destination',
+    excerpt: 'Everything you need to know before visiting Vietnam — connectivity, culture, and cuisine.',
+    category: 'Vietnam',
     date: '2023-12-28',
     readTime: '10 min',
     emoji: '🇻🇳',
@@ -55,10 +46,10 @@ export default function BlogPage() {
           <div className="container text-center">
             <div className="inline-flex items-center gap-2 bg-white/10 text-white/90 border border-white/20 px-4 py-2 rounded-full text-sm mb-4">
               <BookOpen className="w-4 h-4" />
-              Travel Guides
+              Vietnam Guides
             </div>
-            <h1 className="text-4xl font-black text-white mb-3">Travel Guides & Tips</h1>
-            <p className="text-white/80">Everything you need to know about eSIMs and travel connectivity</p>
+            <h1 className="text-4xl font-black text-white mb-3">Vietnam Travel & eSIM Guides</h1>
+            <p className="text-white/80">Tips for staying connected on your Vietnam trip</p>
           </div>
         </div>
 

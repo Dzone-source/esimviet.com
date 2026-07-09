@@ -121,7 +121,7 @@ export default function OrderSuccessClient() {
 
             {/* CTA */}
             <div className="flex flex-col sm:flex-row gap-3">
-              <Link href="/countries" className="btn-primary flex-1 justify-center">
+              <Link href="/countries/vietnam" className="btn-primary flex-1 justify-center">
                 Browse More Plans
                 <ArrowRight className="w-4 h-4" />
               </Link>
@@ -132,8 +132,8 @@ export default function OrderSuccessClient() {
 
             <p className="text-center text-gray-400 text-xs mt-4">
               Questions? Email us at{' '}
-              <a href="mailto:support@esimglobal.com" className="text-primary-600 hover:underline">
-                support@esimglobal.com
+              <a href="mailto:support@esimviet.com" className="text-primary-600 hover:underline">
+                support@esimviet.com
               </a>
             </p>
           </div>

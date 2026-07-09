@@ -82,7 +82,7 @@ export async function createPayPalOrder(amount: number, orderNumber: string): Pr
       application_context: {
         return_url: `${process.env.FRONTEND_URL}/order/success`,
         cancel_url: `${process.env.FRONTEND_URL}/checkout`,
-        brand_name: process.env.SITE_NAME || 'eSIM Global',
+        brand_name: process.env.SITE_NAME || 'eSIM Viet',
         user_action: 'PAY_NOW',
       },
     }),

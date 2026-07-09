@@ -19,26 +19,26 @@ export default function CTASection() {
           <div className="relative z-10">
             <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white text-sm font-medium px-4 py-2 rounded-full mb-6">
               <Zap className="w-4 h-4 text-yellow-300" />
-              Ready to Travel?
+              Ready for Vietnam?
             </div>
 
             <h2 className="text-3xl md:text-5xl font-black text-white mb-4 leading-tight">
-              Get Your eSIM Today
+              Get Your Vietnam eSIM Today
               <br />
               <span className="text-blue-200">Starting from $4.99</span>
             </h2>
 
             <p className="text-white/80 text-lg mb-8 max-w-xl mx-auto">
-              Join thousands of happy travelers who stay connected worldwide with our affordable eSIM plans.
+              Join thousands of travelers who stay connected in Vietnam with our affordable eSIM plans.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/countries"
+                href="/countries/vietnam"
                 className="inline-flex items-center justify-center gap-2 bg-white text-primary-700 hover:bg-blue-50 font-bold px-8 py-4 rounded-2xl transition-all duration-200 hover:shadow-lg active:scale-95"
               >
                 <Globe className="w-5 h-5" />
-                Browse All Plans
+                View Vietnam Plans
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link

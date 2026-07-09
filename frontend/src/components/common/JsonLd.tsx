@@ -17,16 +17,15 @@ export function WebsiteJsonLd() {
       data={{
         '@context': 'https://schema.org',
         '@type': 'WebSite',
-        name: 'eSIM Global',
-        url: process.env.NEXT_PUBLIC_SITE_URL || 'https://esimglobal.com',
-        description: 'Buy eSIM online for 100+ countries. Affordable data plans for travelers.',
+        name: 'eSIM Viet',
+        url: process.env.NEXT_PUBLIC_SITE_URL || 'https://esimviet.com',
+        description: 'Buy Vietnam eSIM online. Affordable 4G/5G data plans for travelers.',
         potentialAction: {
           '@type': 'SearchAction',
           target: {
             '@type': 'EntryPoint',
-            urlTemplate: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://esimglobal.com'}/countries?search={search_term_string}`,
+            urlTemplate: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://esimviet.com'}/countries/vietnam`,
           },
-          'query-input': 'required name=search_term_string',
         },
       }}
     />

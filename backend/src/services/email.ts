@@ -109,8 +109,8 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData): Promise<
       </div>
     </div>
     <div class="footer">
-      <p>Questions? Contact us at ${process.env.SMTP_USER || 'support@esimglobal.com'}</p>
-      <p style="margin-top: 8px;">© 2024 eSIM Global. All rights reserved.</p>
+      <p>Questions? Contact us at ${process.env.SMTP_USER || 'support@esimviet.com'}</p>
+      <p style="margin-top: 8px;">© 2024 eSIM Viet. All rights reserved.</p>
     </div>
   </div>
 </body>
@@ -211,8 +211,8 @@ export async function sendEsimDeliveryEmail(data: EsimDeliveryData): Promise<voi
       </div>
     </div>
     <div class="footer">
-      <p>Need help? Contact us at ${process.env.SMTP_USER || 'support@esimglobal.com'}</p>
-      <p style="margin-top: 8px;">© 2024 eSIM Global. All rights reserved.</p>
+      <p>Need help? Contact us at ${process.env.SMTP_USER || 'support@esimviet.com'}</p>
+      <p style="margin-top: 8px;">© 2024 eSIM Viet. All rights reserved.</p>
     </div>
   </div>
 </body>

@@ -18,7 +18,7 @@ const FAQS = [
   },
   {
     question: 'When should I activate my eSIM?',
-    answer: 'We recommend installing the eSIM before you travel while connected to WiFi. However, the data plan will only start counting from when you arrive in the destination country and connect to the local network.',
+    answer: 'We recommend installing the eSIM before you travel while connected to WiFi. The data plan starts when you arrive in Vietnam and connect to a local network.',
   },
   {
     question: 'Can I use hotspot / tethering?',

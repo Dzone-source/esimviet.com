@@ -45,7 +45,7 @@ export default function CheckoutClient() {
       <div className="pt-24 min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-gray-500 mb-4">No plan selected.</p>
-          <Link href="/countries" className="btn-primary">Browse Plans</Link>
+          <Link href="/countries/vietnam" className="btn-primary">View Vietnam Plans</Link>
         </div>
       </div>
     );
@@ -64,7 +64,7 @@ export default function CheckoutClient() {
       <div className="pt-24 min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-gray-500 mb-4">Plan not found.</p>
-          <Link href="/countries" className="btn-primary">Browse Plans</Link>
+          <Link href="/countries/vietnam" className="btn-primary">View Vietnam Plans</Link>
         </div>
       </div>
     );

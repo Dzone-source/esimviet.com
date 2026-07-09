@@ -3,7 +3,7 @@ import MainLayout from '@/components/layout/MainLayout';
 import { Mail, MessageCircle, Clock, HeadphonesIcon } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Contact Us – eSIM Global Support',
+  title: 'Contact Us – eSIM Viet Support',
   description: 'Need help with your eSIM? Contact our 24/7 support team via email or live chat.',
 };
 
@@ -21,7 +21,7 @@ export default function ContactPage() {
         <div className="container mt-12 max-w-4xl">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
             {[
-              { icon: Mail, title: 'Email Support', desc: 'support@esimglobal.com', sub: 'Response within 2 hours' },
+              { icon: Mail, title: 'Email Support', desc: 'support@esimviet.com', sub: 'Response within 2 hours' },
               { icon: MessageCircle, title: 'Live Chat', desc: 'Facebook Messenger', sub: 'Instant responses' },
               { icon: Clock, title: 'Support Hours', desc: '24/7 Available', sub: 'Including weekends' },
             ].map(({ icon: Icon, title, desc, sub }) => (
