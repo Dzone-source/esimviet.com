@@ -24,6 +24,7 @@ export default function Navbar() {
     { href: '/countries/vietnam', label: 'Vietnam Plans' },
     { href: '/#device-compatibility', label: 'Device Check' },
     { href: '/#how-to-use', label: 'How to Use' },
+    { href: '/blog', label: 'Blog' },
     { href: '/contact', label: 'Support' },
   ];
 

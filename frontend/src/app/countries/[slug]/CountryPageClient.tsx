@@ -18,30 +18,6 @@ import type { Country } from '@/types';
 
 interface Props { slug: string; }
 
-const TRAVEL_TIPS = [
-  'Best time to visit: March–April and September–November',
-  'Currency: Vietnamese Dong (VND)',
-  'Capital: Hanoi | Major city: Ho Chi Minh City',
-  'Known for: Ha Long Bay, Ancient Hoi An, delicious street food',
-];
-
-function TravelTipsCard({ countryName }: { countryName: string }) {
-  return (
-    <section className="section bg-surface-50 pt-0">
-      <div className="container max-w-3xl">
-        <div className="bg-white rounded-2xl p-6 shadow-card border border-surface-200">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">Travel Tips for {countryName}</h3>
-          <ul className="space-y-2">
-            {TRAVEL_TIPS.map((tip) => (
-              <li key={tip} className="text-gray-600 text-sm">• {tip}</li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 export default function CountryPageClient({ slug }: Props) {
   const { data: country, isLoading, isError } = useQuery({
     queryKey: ['country', slug],
@@ -125,7 +101,6 @@ export default function CountryPageClient({ slug }: Props) {
         </div>
       </section>
 
-      <TravelTipsCard countryName={country.name} />
       {slug === 'vietnam' && <RefundPolicySection />}
       <DeviceCompatibilitySection />
       <HowToUseSection />
