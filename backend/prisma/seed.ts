@@ -53,6 +53,7 @@ async function main() {
       region: 'Asia',
       is_popular: true,
       is_active: true,
+      cover_image: '/images/vietnam-hero.jpg',
     },
     create: {
       name: 'Vietnam',
@@ -61,7 +62,7 @@ async function main() {
       region: 'Asia',
       is_popular: true,
       is_active: true,
-      cover_image: '/covers/vietnam.jpg',
+      cover_image: '/images/vietnam-hero.jpg',
     },
   });
 

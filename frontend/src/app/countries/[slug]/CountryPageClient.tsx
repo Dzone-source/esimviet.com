@@ -1,6 +1,7 @@
 'use client';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, MapPin, Wifi } from 'lucide-react';
 import api from '@/lib/api';
@@ -16,6 +17,25 @@ import ProductFAQSection from '@/components/product/ProductFAQSection';
 import type { Country } from '@/types';
 
 interface Props { slug: string; }
+
+const VIETNAM_HERO_IMAGE = '/images/vietnam-hero.jpg';
+
+function getHeroImage(country: Country, slug: string): string {
+  if (country.cover_image) {
+    if (country.cover_image.startsWith('http')) {
+      return country.cover_image;
+    }
+    if (country.cover_image.startsWith('/uploads')) {
+      const siteUrl =
+        process.env.NEXT_PUBLIC_SITE_URL ||
+        (process.env.NEXT_PUBLIC_API_URL || '').replace(/\/api\/?$/, '');
+      return `${siteUrl}${country.cover_image}`;
+    }
+    return country.cover_image;
+  }
+
+  return slug === 'vietnam' ? VIETNAM_HERO_IMAGE : VIETNAM_HERO_IMAGE;
+}
 
 const TRAVEL_TIPS = [
   'Best time to visit: March–April and September–November',
@@ -67,15 +87,24 @@ export default function CountryPageClient({ slug }: Props) {
   const plans = country.plans || [];
   const featuredIndex = plans.length > 1 ? Math.floor(plans.length / 2) : -1;
   const maxSavings = getMaxSavingsAcrossPlans(plans);
+  const heroImage = getHeroImage(country, slug);
 
   return (
     <div className="pt-16">
       {/* Hero Banner */}
-      <div className="relative hero-gradient min-h-[50vh] flex items-end pb-12 overflow-hidden">
-        <div className="pattern-overlay absolute inset-0" />
-        <div className="absolute inset-0 flex items-center justify-center opacity-10">
-          <span className="text-[20rem] leading-none">{country.flag}</span>
-        </div>
+      <div className="relative min-h-[52vh] md:min-h-[58vh] flex items-end pb-12 overflow-hidden">
+        <Image
+          src={heroImage}
+          alt={`${country.name} travel landscape`}
+          fill
+          priority
+          className="object-cover object-center scale-105"
+          sizes="100vw"
+        />
+
+        <div className="absolute inset-0 bg-gradient-to-r from-primary-950/92 via-primary-900/78 to-primary-800/55" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
+        <div className="pattern-overlay absolute inset-0 opacity-20" />
 
         <div className="container relative z-10">
           <Link
@@ -104,6 +133,12 @@ export default function CountryPageClient({ slug }: Props) {
               </div>
             </div>
           </motion.div>
+        </div>
+
+        <div className="absolute bottom-0 left-0 right-0 z-10 pointer-events-none">
+          <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+            <path d="M0 60L1440 60L1440 30C1200 60 960 0 720 30C480 60 240 0 0 30L0 60Z" fill="white" />
+          </svg>
         </div>
       </div>
 
