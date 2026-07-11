@@ -8,9 +8,11 @@ import { getMaxSavingsAcrossPlans } from '@/lib/planPricing';
 import PlanCard from '@/components/common/PlanCard';
 import PlanPriceComparison from '@/components/common/PlanPriceComparison';
 import { PageLoader } from '@/components/common/LoadingSpinner';
-import FAQSection from '@/components/home/FAQSection';
 import DeviceCompatibilitySection from '@/components/home/DeviceCompatibilitySection';
 import HowToUseSection from '@/components/home/HowToUseSection';
+import ProductNoticeSection from '@/components/product/ProductNoticeSection';
+import RefundPolicySection from '@/components/product/RefundPolicySection';
+import ProductFAQSection from '@/components/product/ProductFAQSection';
 import type { Country } from '@/types';
 
 interface Props { slug: string; }
@@ -127,6 +129,8 @@ export default function CountryPageClient({ slug }: Props) {
             )}
           </motion.div>
 
+          {slug === 'vietnam' && <ProductNoticeSection />}
+
           {plans.length === 0 ? (
             <div className="text-center py-16 bg-surface-50 rounded-2xl">
               <Wifi className="w-12 h-12 text-gray-300 mx-auto mb-3" />
@@ -156,6 +160,7 @@ export default function CountryPageClient({ slug }: Props) {
       </section>
 
       <TravelTipsCard countryName={country.name} />
+      {slug === 'vietnam' && <RefundPolicySection />}
       <DeviceCompatibilitySection />
       <HowToUseSection />
       {plans.length > 0 && (
@@ -165,7 +170,7 @@ export default function CountryPageClient({ slug }: Props) {
           </div>
         </section>
       )}
-      <FAQSection />
+      {slug === 'vietnam' ? <ProductFAQSection /> : null}
     </div>
   );
 }
