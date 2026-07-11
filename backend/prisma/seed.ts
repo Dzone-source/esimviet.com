@@ -45,6 +45,11 @@ async function main() {
     data: { is_active: false },
   });
 
+  await prisma.country.updateMany({
+    where: { slug: 'vietnam' },
+    data: { cover_image: '/images/vietnam-hero.jpg' },
+  });
+
   const vietnam = await prisma.country.upsert({
     where: { slug: 'vietnam' },
     update: {
