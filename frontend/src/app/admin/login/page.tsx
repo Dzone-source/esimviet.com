@@ -12,7 +12,7 @@ function getLoginErrorMessage(error: unknown): string {
       return 'Không kết nối được API. Kiểm tra backend đang chạy và NEXT_PUBLIC_API_URL.';
     }
     if (error.response.status === 401) {
-      return 'Sai username hoặc password. Mặc đnh: admin / admin123';
+      return 'Sai username hoặc password';
     }
     if (error.response.status >= 500) {
       return 'Lỗi server – database chưa kết nối hoặc chưa seed. Chạy: npm run reset-admin';

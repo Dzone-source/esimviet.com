@@ -89,4 +89,63 @@ router.put(
   }
 );
 
+router.put(
+  '/account',
+  authenticate,
+  [
+    body('currentPassword').notEmpty().withMessage('Current password required'),
+    body('username').optional().trim().isLength({ min: 3 }).withMessage('Username must be at least 3 characters'),
+    body('newPassword').optional().isLength({ min: 6 }).withMessage('New password must be at least 6 characters'),
+  ],
+  async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        res.status(400).json({ success: false, errors: errors.array() });
+        return;
+      }
+
+      const { currentPassword, username, newPassword } = req.body;
+      const user = await prisma.user.findUnique({ where: { id: req.user!.id } });
+
+      if (!user || !(await bcrypt.compare(currentPassword, user.password))) {
+        throw createError('Current password is incorrect', 400);
+      }
+
+      if (!username && !newPassword) {
+        throw createError('Provide a new username and/or new password', 400);
+      }
+
+      if (username && username !== user.username) {
+        const taken = await prisma.user.findUnique({ where: { username } });
+        if (taken) {
+          throw createError('Username is already taken', 400);
+        }
+      }
+
+      const data: { username?: string; password?: string } = {};
+      if (username && username !== user.username) {
+        data.username = username;
+      }
+      if (newPassword) {
+        data.password = await bcrypt.hash(newPassword, 12);
+      }
+
+      const updated = await prisma.user.update({
+        where: { id: user.id },
+        data,
+        select: { id: true, username: true, role: true },
+      });
+
+      res.json({
+        success: true,
+        message: 'Account updated',
+        user: updated,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 export default router;
