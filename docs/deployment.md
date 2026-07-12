@@ -31,9 +31,9 @@ Nginx (443) → frontend :3000 (Next.js)
 4. `backend/.env` + `npm ci` + `prisma db push` + `npm run build`
 5. `frontend/.env.local` + `npm ci` + `npm run build`
 6. `pm2 start ecosystem.config.js`
-7. Nginx (`docs/nginx-esimviet.conf`)
-8. `certbot --nginx -d esimviet.com -d www.esimviet.com`
-9. UFW (22, 80, 443)
+7. Nginx + Cloudflare snippets (`docs/nginx-esimviet.conf`, `docs/cloudflare-only-access.md`)
+8. SSL — Cloudflare Origin Certificate (recommended) or certbot DNS challenge
+9. UFW — `scripts/setup-cloudflare-firewall.sh` (Cloudflare IPs only on 80/443)
 
 ## Production env files
 

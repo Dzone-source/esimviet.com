@@ -243,15 +243,19 @@ curl -I http://127.0.0.1:3000
 
 ---
 
-## Step 9 — Install and configure Nginx
+## Step 9 — Install and configure Nginx (Cloudflare-only)
+
+See full guide: [docs/cloudflare-only-access.md](cloudflare-only-access.md)
 
 ```bash
 apt install -y nginx
 ```
 
-Copy the site config from the repo:
+Copy Cloudflare snippets and site config:
 
 ```bash
+cp /var/www/esimviet.com/docs/nginx-cloudflare-allow.conf /etc/nginx/snippets/cloudflare-allow.conf
+cp /var/www/esimviet.com/docs/nginx-cloudflare-realip.conf /etc/nginx/snippets/cloudflare-realip.conf
 cp /var/www/esimviet.com/docs/nginx-esimviet.conf /etc/nginx/sites-available/esimviet.com
 ln -sf /etc/nginx/sites-available/esimviet.com /etc/nginx/sites-enabled/
 rm -f /etc/nginx/sites-enabled/default
@@ -260,33 +264,36 @@ nginx -t
 systemctl reload nginx
 ```
 
-At this stage the site works on **HTTP** only.
+At this stage the site works on **HTTP** only (via Cloudflare proxy).
 
 ---
 
-## Step 10 — SSL with Let's Encrypt
+## Step 10 — SSL
+
+**Recommended with Cloudflare:** use a **Cloudflare Origin Certificate** (SSL/TLS → Origin Server in Cloudflare dashboard). Update certificate paths in nginx if not using Let's Encrypt.
+
+Alternative — Let's Encrypt with DNS challenge (HTTP-01 will fail after Cloudflare-only firewall):
 
 ```bash
 apt install -y certbot python3-certbot-nginx
 certbot --nginx -d esimviet.com -d www.esimviet.com
 ```
 
-Follow prompts (email, agree, redirect HTTP→HTTPS: **Yes**).
-
-Auto-renewal test:
-
-```bash
-certbot renew --dry-run
-```
-
 ---
 
-## Step 11 — Firewall
+## Step 11 — Firewall (Cloudflare IPs only)
+
+Replace open `Nginx Full` with Cloudflare-only rules:
 
 ```bash
-ufw allow OpenSSH
-ufw allow 'Nginx Full'
-ufw enable
+bash /var/www/esimviet.com/scripts/setup-cloudflare-firewall.sh
+```
+
+This blocks **all direct IP access** on ports 80/443. Only Cloudflare edge servers can connect.
+
+Verify:
+
+```bash
 ufw status
 ```
 
