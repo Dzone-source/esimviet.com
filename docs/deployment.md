@@ -12,7 +12,7 @@
 | MariaDB | 10.11+ |
 | Process manager | PM2 |
 | Reverse proxy | Nginx |
-| SSL | Let's Encrypt (certbot) |
+| SSL | Let's Encrypt (certbot DNS-Cloudflare) |
 | Domain | https://esimviet.com |
 
 ## Stack overview
@@ -32,7 +32,7 @@ Nginx (443) → frontend :3000 (Next.js)
 5. `frontend/.env.local` + `npm ci` + `npm run build`
 6. `pm2 start ecosystem.config.js`
 7. Nginx + Cloudflare snippets (`docs/nginx-esimviet.conf`, `docs/cloudflare-only-access.md`)
-8. SSL — Cloudflare Origin Certificate (recommended) or certbot DNS challenge
+8. SSL — `scripts/setup-certbot-dns-cloudflare.sh` (see `docs/certbot-dns-cloudflare.md`)
 9. UFW — `scripts/setup-cloudflare-firewall.sh` (Cloudflare IPs only on 80/443)
 
 ## Production env files

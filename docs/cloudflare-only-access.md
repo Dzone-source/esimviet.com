@@ -8,9 +8,7 @@ Block all direct access to the VPS IP. Only traffic proxied through Cloudflare (
 2. Point DNS **A** record `@` → your VPS IP (proxied / orange cloud ON).
 3. Point DNS **A** or **CNAME** `www` → same (proxied ON).
 4. **SSL/TLS** → set mode to **Full (strict)**.
-5. Install SSL on origin using one of:
-   - **Cloudflare Origin Certificate** (recommended) — SSL/TLS → Origin Server → Create Certificate, install on nginx, or
-   - **Let's Encrypt DNS challenge** — HTTP-01 renewal will fail once the firewall blocks non-Cloudflare IPs.
+5. Install SSL on origin using **Let's Encrypt DNS challenge** (see [certbot-dns-cloudflare.md](certbot-dns-cloudflare.md)) — works with Cloudflare-only firewall.
 
 ## VPS setup
 
@@ -62,9 +60,21 @@ curl -I http://YOUR_VPS_IP
 curl -I -k https://YOUR_VPS_IP
 ```
 
-## SSL with Cloudflare Origin Certificate
+## SSL with Let's Encrypt (DNS challenge — recommended)
 
-If using Origin Certificate instead of Let's Encrypt, update paths in `nginx-esimviet.conf`:
+Auto-issue and auto-renew SSL via Cloudflare DNS API:
+
+```bash
+CLOUDFLARE_API_TOKEN=your_token \
+CERTBOT_EMAIL=support@esimviet.com \
+sudo -E bash scripts/setup-certbot-dns-cloudflare.sh
+```
+
+Full guide: [certbot-dns-cloudflare.md](certbot-dns-cloudflare.md)
+
+## SSL with Cloudflare Origin Certificate (alternative)
+
+If you prefer a 15-year origin cert from Cloudflare instead of Let's Encrypt:
 
 ```nginx
 ssl_certificate /etc/ssl/cloudflare/esimviet.com.pem;

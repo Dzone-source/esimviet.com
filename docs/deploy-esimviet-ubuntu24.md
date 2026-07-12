@@ -268,15 +268,37 @@ At this stage the site works on **HTTP** only (via Cloudflare proxy).
 
 ---
 
-## Step 10 — SSL
+## Step 10 — SSL (Let's Encrypt DNS challenge)
 
-**Recommended with Cloudflare:** use a **Cloudflare Origin Certificate** (SSL/TLS → Origin Server in Cloudflare dashboard). Update certificate paths in nginx if not using Let's Encrypt.
+HTTP certbot (`certbot --nginx`) does **not** work with Cloudflare-only firewall.  
+Use DNS challenge instead:
 
-Alternative — Let's Encrypt with DNS challenge (HTTP-01 will fail after Cloudflare-only firewall):
+### 10a — Create Cloudflare API token
+
+Cloudflare Dashboard → **My Profile** → **API Tokens** → **Edit zone DNS** → zone `esimviet.com`.
+
+### 10b — Issue certificate
 
 ```bash
-apt install -y certbot python3-certbot-nginx
-certbot --nginx -d esimviet.com -d www.esimviet.com
+cd /var/www/esimviet.com
+
+CLOUDFLARE_API_TOKEN=your_token_here \
+CERTBOT_EMAIL=support@esimviet.com \
+bash scripts/setup-certbot-dns-cloudflare.sh
+```
+
+This installs certbot, issues SSL for `esimviet.com` + `www.esimviet.com`, reloads nginx, and verifies auto-renewal.
+
+Full guide: [docs/certbot-dns-cloudflare.md](certbot-dns-cloudflare.md)
+
+### 10c — Cloudflare SSL mode
+
+Set **SSL/TLS → Full (strict)** in Cloudflare dashboard.
+
+Auto-renewal runs via systemd timer (`certbot.timer`). Test anytime:
+
+```bash
+certbot renew --dry-run
 ```
 
 ---
