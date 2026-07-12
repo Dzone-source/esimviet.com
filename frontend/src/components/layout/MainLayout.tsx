@@ -1,6 +1,6 @@
 import Navbar from './Navbar';
 import Footer from './Footer';
-import FacebookMessenger from '../common/FacebookMessenger';
+import WhatsAppChat from '../common/WhatsAppChat';
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -8,7 +8,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       <Navbar />
       <main className="flex-1">{children}</main>
       <Footer />
-      <FacebookMessenger />
+      <WhatsAppChat />
     </div>
   );
 }

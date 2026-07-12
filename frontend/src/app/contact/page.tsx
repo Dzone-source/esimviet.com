@@ -4,7 +4,7 @@ import { Mail, MessageCircle, Clock, HeadphonesIcon } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Contact Us – eSIM Viet Support',
-  description: 'Need help with your eSIM? Contact our 24/7 support team via email or live chat.',
+  description: 'Need help with your eSIM? Contact our 24/7 support team via email or WhatsApp.',
 };
 
 export default function ContactPage() {
@@ -21,16 +21,22 @@ export default function ContactPage() {
         <div className="container mt-12 max-w-4xl">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
             {[
-              { icon: Mail, title: 'Email Support', desc: 'support@esimviet.com', sub: 'Response within 2 hours' },
-              { icon: MessageCircle, title: 'Live Chat', desc: 'Facebook Messenger', sub: 'Instant responses' },
-              { icon: Clock, title: 'Support Hours', desc: '24/7 Available', sub: 'Including weekends' },
-            ].map(({ icon: Icon, title, desc, sub }) => (
+              { icon: Mail, title: 'Email Support', desc: 'support@esimviet.com', sub: 'Response within 2 hours', href: 'mailto:support@esimviet.com' },
+              { icon: MessageCircle, title: 'WhatsApp', desc: '+84 796 969 444', sub: 'Instant responses', href: 'https://wa.me/84796969444' },
+              { icon: Clock, title: 'Support Hours', desc: '24/7 Available', sub: 'Including weekends', href: undefined },
+            ].map(({ icon: Icon, title, desc, sub, href }) => (
               <div key={title} className="bg-white rounded-2xl p-6 shadow-card border border-surface-200 text-center">
                 <div className="w-12 h-12 bg-primary-50 rounded-2xl flex items-center justify-center mx-auto mb-3">
                   <Icon className="w-6 h-6 text-primary-600" />
                 </div>
                 <h3 className="font-bold text-gray-900 mb-1">{title}</h3>
-                <p className="text-primary-600 font-medium text-sm">{desc}</p>
+                {href ? (
+                  <a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel={href.startsWith('http') ? 'noopener noreferrer' : undefined} className="text-primary-600 font-medium text-sm hover:underline">
+                    {desc}
+                  </a>
+                ) : (
+                  <p className="text-primary-600 font-medium text-sm">{desc}</p>
+                )}
                 <p className="text-gray-400 text-xs mt-1">{sub}</p>
               </div>
             ))}
