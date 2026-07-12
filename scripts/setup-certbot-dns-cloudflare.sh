@@ -36,7 +36,10 @@ fi
 
 echo "Installing certbot + Cloudflare DNS plugin..."
 apt-get update -qq
-apt-get install -y certbot python3-certbot-dns-cloudflare
+apt-get install -y certbot python3-certbot-dns-cloudflare openssl
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+bash "$SCRIPT_DIR/setup-nginx-reject-cert.sh"
 
 mkdir -p /etc/letsencrypt/renewal-hooks/deploy
 
@@ -58,6 +61,7 @@ certbot certonly \
   --dns-cloudflare-propagation-seconds "$PROPAGATION_SECONDS" \
   -d "$DOMAIN" \
   -d "$WWW_DOMAIN" \
+  --cert-name "$DOMAIN" \
   --email "$CERTBOT_EMAIL" \
   --agree-tos \
   --non-interactive \

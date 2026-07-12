@@ -101,9 +101,11 @@ chmod 600 /etc/letsencrypt/cloudflare.ini
 
 | Problem | Fix |
 |---------|-----|
+| `cannot load certificate ssl-cert-snakeoil.pem` | Run `sudo bash scripts/setup-nginx-reject-cert.sh` and update nginx config from repo |
+| `nginx plugin is not working` on renew | Renewal still uses old nginx authenticator — run `sudo bash scripts/fix-certbot-renewal.sh` |
 | `Invalid API Token` | Recreate token with DNS Edit on esimviet.com zone |
 | `Timeout during propagation` | Increase wait: `DNS_PROPAGATION_SECONDS=60` |
-| Nginx SSL error after issue | `nginx -t && systemctl reload nginx` |
+| Nginx SSL error after issue | Run `setup-nginx-reject-cert.sh`, then `nginx -t && systemctl reload nginx` |
 | Renewal fails | Check token not revoked; `certbot renew --dry-run -v` |
 
 ## Cloudflare SSL mode
