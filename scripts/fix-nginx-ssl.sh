@@ -39,10 +39,11 @@ if [ -f "$REPO_ROOT/docs/nginx-esimviet.conf" ]; then
   echo "  Copied docs/nginx-esimviet.conf → /etc/nginx/sites-available/esimviet.com"
 fi
 
-if [ -f "$REPO_ROOT/docs/nginx-cloudflare-allow.conf" ]; then
+if [ -f "$REPO_ROOT/docs/nginx-cloudflare-geo.conf" ]; then
   mkdir -p /etc/nginx/snippets
   cp "$REPO_ROOT/docs/nginx-cloudflare-allow.conf" /etc/nginx/snippets/cloudflare-allow.conf
   cp "$REPO_ROOT/docs/nginx-cloudflare-realip.conf" /etc/nginx/snippets/cloudflare-realip.conf
+  cp "$REPO_ROOT/docs/nginx-cloudflare-geo.conf" /etc/nginx/snippets/cloudflare-geo.conf
   echo "  Updated Cloudflare nginx snippets"
 fi
 
