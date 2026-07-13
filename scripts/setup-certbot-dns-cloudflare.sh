@@ -34,11 +34,23 @@ if [ -z "${CLOUDFLARE_API_TOKEN:-}" ]; then
   exit 1
 fi
 
+# Trim accidental whitespace / quotes from copy-paste
+CLOUDFLARE_API_TOKEN="$(printf '%s' "$CLOUDFLARE_API_TOKEN" | tr -d '\r\n' | sed -e 's/^[[:space:]"'\'']*//' -e 's/[[:space:]"'\'']*$//')"
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+echo "=== Pre-check: Cloudflare zone access ==="
+if ! CLOUDFLARE_API_TOKEN="$CLOUDFLARE_API_TOKEN" bash "$SCRIPT_DIR/verify-cloudflare-zone.sh" "$DOMAIN"; then
+  echo ""
+  echo "Aborting certbot — fix Cloudflare setup first, then re-run this script."
+  exit 1
+fi
+echo ""
+
 echo "Installing certbot + Cloudflare DNS plugin..."
 apt-get update -qq
 apt-get install -y certbot python3-certbot-dns-cloudflare openssl
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 bash "$SCRIPT_DIR/setup-nginx-reject-cert.sh"
 
 mkdir -p /etc/letsencrypt/renewal-hooks/deploy

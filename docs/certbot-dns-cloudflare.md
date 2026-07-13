@@ -45,7 +45,15 @@ The script will:
 
 ### Add 5gtrip.com (second domain)
 
-Same VPS, separate certificate. Token must include **5gtrip.com** zone (or use a token with both zones):
+**Prerequisite:** `5gtrip.com` must be added to Cloudflare (same account as the API token) and nameservers must point to Cloudflare.
+
+Verify before certbot:
+
+```bash
+CLOUDFLARE_API_TOKEN=your_token bash scripts/verify-cloudflare-zone.sh 5gtrip.com
+```
+
+Token must include **5gtrip.com** zone (create a separate token if esimviet token is zone-scoped):
 
 ```bash
 CLOUDFLARE_API_TOKEN=your_token_here \
@@ -122,7 +130,8 @@ chmod 600 /etc/letsencrypt/cloudflare.ini
 |---------|-----|
 | `cannot load certificate ssl-cert-snakeoil.pem` | Run `sudo bash scripts/setup-nginx-reject-cert.sh` and update nginx config from repo |
 | `nginx plugin is not working` on renew | Renewal still uses old nginx authenticator — run `sudo bash scripts/fix-certbot-renewal.sh` |
-| `Invalid API Token` | Recreate token with DNS Edit on esimviet.com zone |
+| `Invalid API Token` / `6003 Invalid request headers` | Token wrong or copy-paste error — recreate token; test with `bash scripts/verify-cloudflare-zone.sh <domain>` |
+| `Unable to determine zone_id for 5gtrip.com` | Add **5gtrip.com** to Cloudflare first, or create token scoped to zone **5gtrip.com** (not only esimviet.com) |
 | `Timeout during propagation` | Increase wait: `DNS_PROPAGATION_SECONDS=60` |
 | Nginx SSL error after issue | Run `setup-nginx-reject-cert.sh`, then `nginx -t && systemctl reload nginx` |
 | Renewal fails | Check token not revoked; `certbot renew --dry-run -v` |
