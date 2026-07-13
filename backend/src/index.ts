@@ -11,6 +11,7 @@ import compression from 'compression';
 import { rateLimit } from 'express-rate-limit';
 import { errorHandler } from './middleware/errorHandler';
 import { logger } from './utils/logger';
+import { getAllowedOrigins } from './utils/corsOrigins';
 import authRoutes from './routes/auth';
 import countryRoutes from './routes/countries';
 import planRoutes from './routes/plans';
@@ -50,13 +51,8 @@ const authLimiter = rateLimit({
 });
 app.use('/api/auth/', authLimiter);
 
-// CORS – allow production domain + FRONTEND_URL
-const allowedOrigins = [
-  process.env.FRONTEND_URL,
-  'http://localhost:3000',
-  'https://esimviet.com',
-  'https://www.esimviet.com',
-].filter(Boolean) as string[];
+// CORS – allow production domains + FRONTEND_URL + ALLOWED_ORIGINS
+const allowedOrigins = getAllowedOrigins();
 
 app.use(cors({
   origin: (origin, callback) => {

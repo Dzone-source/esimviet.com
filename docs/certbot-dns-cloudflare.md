@@ -43,6 +43,24 @@ The script will:
 4. Reload nginx
 5. Run `certbot renew --dry-run` to verify auto-renewal
 
+### Add 5gtrip.com (second domain)
+
+Same VPS, separate certificate. Token must include **5gtrip.com** zone (or use a token with both zones):
+
+```bash
+CLOUDFLARE_API_TOKEN=your_token_here \
+CERTBOT_EMAIL=support@esimviet.com \
+sudo -E bash scripts/setup-certbot-5gtrip.sh
+```
+
+Then deploy nginx config from repo (includes both domains):
+
+```bash
+sudo cp docs/nginx-esimviet-common.conf /etc/nginx/snippets/esimviet-common.conf
+sudo cp docs/nginx-esimviet.conf /etc/nginx/sites-available/esimviet.com
+sudo nginx -t && sudo systemctl reload nginx
+```
+
 ## Step 3 — Verify
 
 ```bash
@@ -51,6 +69,7 @@ ls -la /etc/letsencrypt/live/esimviet.com/
 
 # HTTPS via Cloudflare
 curl -I https://esimviet.com
+curl -I https://5gtrip.com
 
 # Auto-renew timer
 systemctl status certbot.timer

@@ -1,10 +1,12 @@
-# Cloudflare-only access for esimviet.com
+# Cloudflare-only access for esimviet.com + 5gtrip.com
 
 Block all direct access to the VPS IP. Only traffic proxied through Cloudflare (orange cloud) can reach the site.
 
 ## Cloudflare dashboard (required)
 
-1. Add domain **esimviet.com** to Cloudflare.
+For **each domain** (esimviet.com and 5gtrip.com):
+
+1. Add the domain to Cloudflare.
 2. Point DNS **A** record `@` → your VPS IP (proxied / orange cloud ON).
 3. Point DNS **A** or **CNAME** `www` → same (proxied ON).
 4. **SSL/TLS** → set mode to **Full (strict)**.
@@ -21,6 +23,7 @@ cp docs/nginx-cloudflare-allow.conf /etc/nginx/snippets/cloudflare-allow.conf
 cp docs/nginx-cloudflare-realip.conf /etc/nginx/snippets/cloudflare-realip.conf
 cp docs/nginx-cloudflare-geo.conf /etc/nginx/conf.d/cloudflare-geo.conf
 rm -f /etc/nginx/snippets/cloudflare-geo.conf
+cp docs/nginx-esimviet-common.conf /etc/nginx/snippets/esimviet-common.conf
 cp docs/nginx-esimviet.conf /etc/nginx/sites-available/esimviet.com
 ln -sf /etc/nginx/sites-available/esimviet.com /etc/nginx/sites-enabled/
 rm -f /etc/nginx/sites-enabled/default
@@ -80,6 +83,7 @@ sudo nginx -t && sudo systemctl reload nginx
 ```bash
 # Should work (via Cloudflare)
 curl -I https://esimviet.com
+curl -I https://5gtrip.com
 
 # Should fail / timeout (direct IP — from external machine)
 curl -I http://YOUR_VPS_IP
@@ -94,6 +98,11 @@ Auto-issue and auto-renew SSL via Cloudflare DNS API:
 CLOUDFLARE_API_TOKEN=your_token \
 CERTBOT_EMAIL=support@esimviet.com \
 sudo -E bash scripts/setup-certbot-dns-cloudflare.sh
+
+# Second domain (5gtrip.com) — token must include 5gtrip.com zone
+CLOUDFLARE_API_TOKEN=your_token \
+CERTBOT_EMAIL=support@esimviet.com \
+sudo -E bash scripts/setup-certbot-5gtrip.sh
 ```
 
 Full guide: [certbot-dns-cloudflare.md](certbot-dns-cloudflare.md)

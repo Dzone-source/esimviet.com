@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { prisma } from '../utils/prisma';
 import { createError } from '../middleware/errorHandler';
 import { createPayPalOrder } from '../services/paypal';
+import { resolveFrontendUrl } from '../utils/corsOrigins';
 
 const router = Router();
 
@@ -36,7 +37,8 @@ router.post(
       const total = parseFloat(plan.price.toString()) * parseInt(quantity);
       const orderNumber = `ESM-${uuidv4().substring(0, 8).toUpperCase()}`;
 
-      const paypalOrderId = await createPayPalOrder(total, orderNumber);
+      const frontendUrl = resolveFrontendUrl(req.get('origin'));
+      const paypalOrderId = await createPayPalOrder(total, orderNumber, frontendUrl);
 
       const order = await prisma.order.create({
         data: {

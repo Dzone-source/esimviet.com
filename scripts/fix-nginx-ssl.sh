@@ -43,6 +43,7 @@ if [ -f "$REPO_ROOT/docs/nginx-cloudflare-geo.conf" ]; then
   mkdir -p /etc/nginx/snippets
   cp "$REPO_ROOT/docs/nginx-cloudflare-allow.conf" /etc/nginx/snippets/cloudflare-allow.conf
   cp "$REPO_ROOT/docs/nginx-cloudflare-realip.conf" /etc/nginx/snippets/cloudflare-realip.conf
+  cp "$REPO_ROOT/docs/nginx-esimviet-common.conf" /etc/nginx/snippets/esimviet-common.conf
   cp "$REPO_ROOT/docs/nginx-cloudflare-geo.conf" /etc/nginx/conf.d/cloudflare-geo.conf
   rm -f /etc/nginx/snippets/cloudflare-geo.conf
   echo "  Updated Cloudflare nginx configs"

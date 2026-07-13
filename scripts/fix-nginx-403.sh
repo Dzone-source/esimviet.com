@@ -17,6 +17,10 @@ rm -f /etc/nginx/snippets/cloudflare-geo.conf
 echo "=== Update site config ==="
 cp "$REPO_ROOT/docs/nginx-esimviet.conf" /etc/nginx/sites-available/esimviet.com
 
+if [ -f "$REPO_ROOT/docs/nginx-esimviet-common.conf" ]; then
+  cp "$REPO_ROOT/docs/nginx-esimviet-common.conf" /etc/nginx/snippets/esimviet-common.conf
+fi
+
 if [ -f "$REPO_ROOT/docs/nginx-cloudflare-allow.conf" ]; then
   cp "$REPO_ROOT/docs/nginx-cloudflare-allow.conf" /etc/nginx/snippets/cloudflare-allow.conf
 fi

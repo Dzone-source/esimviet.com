@@ -13,7 +13,7 @@
 | Process manager | PM2 |
 | Reverse proxy | Nginx |
 | SSL | Let's Encrypt (certbot DNS-Cloudflare) |
-| Domain | https://esimviet.com |
+| Domain | https://esimviet.com, https://5gtrip.com (same app) |
 
 ## Stack overview
 
