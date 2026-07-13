@@ -19,6 +19,8 @@ git pull
 # Copy nginx snippets + site config
 cp docs/nginx-cloudflare-allow.conf /etc/nginx/snippets/cloudflare-allow.conf
 cp docs/nginx-cloudflare-realip.conf /etc/nginx/snippets/cloudflare-realip.conf
+cp docs/nginx-cloudflare-geo.conf /etc/nginx/conf.d/cloudflare-geo.conf
+rm -f /etc/nginx/snippets/cloudflare-geo.conf
 cp docs/nginx-esimviet.conf /etc/nginx/sites-available/esimviet.com
 ln -sf /etc/nginx/sites-available/esimviet.com /etc/nginx/sites-enabled/
 rm -f /etc/nginx/sites-enabled/default
@@ -44,9 +46,33 @@ Cloudflare occasionally adds IP ranges:
 
 ```bash
 bash scripts/update-cloudflare-ips.sh
-cp docs/nginx-cloudflare-*.conf /etc/nginx/snippets/
+cp docs/nginx-cloudflare-allow.conf /etc/nginx/snippets/cloudflare-allow.conf
+cp docs/nginx-cloudflare-realip.conf /etc/nginx/snippets/cloudflare-realip.conf
+cp docs/nginx-cloudflare-geo.conf /etc/nginx/conf.d/cloudflare-geo.conf
 nginx -t && systemctl reload nginx
 bash scripts/setup-cloudflare-firewall.sh
+```
+
+## Troubleshooting
+
+### `"geo" directive is not allowed here`
+
+The `geo` block must live in the **http** context, not inside a `server` block or `/etc/nginx/snippets/`.
+
+On the VPS:
+
+```bash
+cd /var/www/esimviet.com && git pull
+sudo bash scripts/fix-nginx-403.sh
+```
+
+Or manually:
+
+```bash
+sudo cp docs/nginx-cloudflare-geo.conf /etc/nginx/conf.d/cloudflare-geo.conf
+sudo rm -f /etc/nginx/snippets/cloudflare-geo.conf
+sudo cp docs/nginx-esimviet.conf /etc/nginx/sites-available/esimviet.com
+sudo nginx -t && sudo systemctl reload nginx
 ```
 
 ## Verify
