@@ -371,6 +371,38 @@ pm2 restart all
 
 ---
 
+## Hero wallpaper auto-refresh (every 12 hours)
+
+Homepage hero images come from Unsplash Vietnam photos stored in
+`frontend/public/images/hero-pool/` as stable slots (`hero-01.webp` …).
+A cron job re-downloads a rotating set, **overwrites** those files in place,
+and rebuilds `manifest.json`. The Next.js `/hero-pool/batch` route reads the
+manifest from disk, so **no rebuild / PM2 restart** is required after each refresh.
+
+```bash
+# Install cron (as root)
+sudo bash /var/www/esimviet.com/scripts/install-hero-pool-cron.sh
+
+# Run once immediately
+sudo bash /var/www/esimviet.com/scripts/update-hero-pool.sh
+
+# Logs
+tail -f /var/log/esimviet/hero-pool-update.log
+```
+
+Crontab entry: `0 */12 * * *` (every 12 hours).
+
+Optional — live Unsplash search (instead of rotating the local ID catalog):
+
+```bash
+# Add to /var/www/esimviet.com/frontend/.env.local
+UNSPLASH_ACCESS_KEY=your_unsplash_access_key
+```
+
+Get a free Access Key at https://unsplash.com/developers
+
+---
+
 ## Useful PM2 commands
 
 ```bash

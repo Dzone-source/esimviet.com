@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Rebuild hero-pool from Unsplash CDN IDs listed in scripts/unsplash-vietnam-ids.txt
-# Source search: https://unsplash.com/s/photos/vietnam
+# One-shot download from the static ID catalog (no rotation).
+# Prefer scripts/update-hero-pool.sh for cron refreshes.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 IDS_FILE="$ROOT/scripts/unsplash-vietnam-ids.txt"
@@ -17,13 +17,14 @@ while read -r id; do
   [ -z "$id" ] && continue
   [[ "$id" =~ ^# ]] && continue
   dest="$TMP/${id}.jpg"
-  if [ ! -s "$dest" ]; then
-    echo "Downloading $id ..."
-    curl -fsSL -o "$dest" \
-      "https://images.unsplash.com/${id}?auto=format&fit=crop&w=2560&h=1440&q=80" || {
-        echo "  failed $id"; rm -f "$dest"; continue;
-      }
-  fi
+  echo "Downloading $id ..."
+  curl -fsSL --retry 3 -o "$dest" \
+    "https://images.unsplash.com/${id}?auto=format&fit=crop&w=2560&h=1440&q=80" || {
+      echo "  failed $id"; rm -f "$dest"; continue;
+    }
 done < "$IDS_FILE"
 
-echo "Run: node scripts/build-unsplash-hero-pool.cjs"
+export HERO_POOL_STABLE_SLOTS=1
+export HERO_POOL_FORCE_CLEAN=1
+export HERO_POOL_SIZE="${HERO_POOL_SIZE:-40}"
+node "$ROOT/scripts/build-unsplash-hero-pool.cjs"
