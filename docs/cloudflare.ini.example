@@ -1,0 +1,12 @@
+# Cloudflare API credentials for certbot DNS challenge
+# Copy to VPS: /etc/letsencrypt/cloudflare.ini
+# chmod 600 /etc/letsencrypt/cloudflare.ini
+#
+# Create token: Cloudflare Dashboard → My Profile → API Tokens → Create Token
+# Template: "Edit zone DNS" → Zone Resources: Include → esimviet.com
+#
+# Required permissions:
+#   Zone - DNS - Edit
+#   Zone - Zone - Read
+
+dns_cloudflare_api_token = YOUR_CLOUDFLARE_API_TOKEN_HERE

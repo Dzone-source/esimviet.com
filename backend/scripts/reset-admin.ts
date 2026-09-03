@@ -3,26 +3,34 @@ import { PrismaClient, Role } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+const username = process.argv[2] || process.env.ADMIN_USERNAME || 'admin';
+const password = process.argv[3] || process.env.ADMIN_PASSWORD || 'admin123';
+
 async function main() {
-  const newPassword = process.argv[2] || 'admin123';
-  const hashed = await bcrypt.hash(newPassword, 12);
+  if (username.length < 3) {
+    throw new Error('Username must be at least 3 characters');
+  }
+  if (password.length < 6) {
+    throw new Error('Password must be at least 6 characters');
+  }
 
-  await prisma.user.upsert({
-    where: { username: 'admin' },
-    update: {
-      password: hashed,
-      role: Role.admin,
-    },
-    create: {
-      username: 'admin',
-      password: hashed,
-      role: Role.admin,
-    },
-  });
+  const hashed = await bcrypt.hash(password, 12);
+  const existingAdmin = await prisma.user.findFirst({ where: { role: Role.admin } });
 
-  console.log('✅ Admin account ready');
-  console.log('   Username: admin');
-  console.log(`   Password: ${newPassword}`);
+  if (existingAdmin) {
+    await prisma.user.update({
+      where: { id: existingAdmin.id },
+      data: { username, password: hashed, role: Role.admin },
+    });
+  } else {
+    await prisma.user.create({
+      data: { username, password: hashed, role: Role.admin },
+    });
+  }
+
+  console.log('✅ Admin account updated');
+  console.log(`   Username: ${username}`);
+  console.log(`   Password: ${password}`);
 }
 
 main()

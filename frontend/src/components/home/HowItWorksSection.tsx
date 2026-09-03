@@ -7,7 +7,7 @@ const STEPS = [
     icon: Search,
     step: '01',
     title: 'Choose Your Plan',
-    description: 'Search for your destination and pick the data plan that fits your trip duration and usage needs.',
+    description: 'Search for a Vietnam plan and pick the data package that fits your trip duration.',
     color: 'from-blue-500 to-cyan-500',
   },
   {
@@ -28,7 +28,7 @@ const STEPS = [
     icon: Smartphone,
     step: '04',
     title: 'Activate & Travel',
-    description: 'Scan the QR code on your phone. Your eSIM activates automatically when you land.',
+    description: 'Scan the QR code on your phone. Your Vietnam eSIM activates when you connect to a local network.',
     color: 'from-amber-500 to-orange-500',
   },
 ];

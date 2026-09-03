@@ -57,7 +57,7 @@ router.post(
       // Send delivery email
       try {
         const absoluteQrPath = qrImagePath
-          ? path.join(process.cwd(), qrImagePath)
+          ? path.join(process.cwd(), qrImagePath.replace(/^\//, ''))
           : undefined;
 
         await sendEsimDeliveryEmail({

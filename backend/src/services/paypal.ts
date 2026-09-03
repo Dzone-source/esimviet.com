@@ -50,6 +50,8 @@ async function getAccessToken(): Promise<string> {
   });
 
   if (!response.ok) {
+    const errorBody = await response.text();
+    logger.error('PayPal token error:', response.status, errorBody);
     throw new Error('Failed to get PayPal access token');
   }
 
@@ -57,8 +59,13 @@ async function getAccessToken(): Promise<string> {
   return data.access_token;
 }
 
-export async function createPayPalOrder(amount: number, orderNumber: string): Promise<string> {
+export async function createPayPalOrder(
+  amount: number,
+  orderNumber: string,
+  frontendUrl?: string
+): Promise<string> {
   const accessToken = await getAccessToken();
+  const siteUrl = frontendUrl || process.env.FRONTEND_URL || 'http://localhost:3000';
 
   const response = await fetch(`${getBaseUrl()}/v2/checkout/orders`, {
     method: 'POST',
@@ -80,9 +87,9 @@ export async function createPayPalOrder(amount: number, orderNumber: string): Pr
         },
       ],
       application_context: {
-        return_url: `${process.env.FRONTEND_URL}/order/success`,
-        cancel_url: `${process.env.FRONTEND_URL}/checkout`,
-        brand_name: process.env.SITE_NAME || 'eSIM Global',
+        return_url: `${siteUrl}/order/success`,
+        cancel_url: `${siteUrl}/checkout`,
+        brand_name: process.env.SITE_NAME || 'eSIM Viet',
         user_action: 'PAY_NOW',
       },
     }),

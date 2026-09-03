@@ -1,12 +1,17 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
+import path from 'path';
+
+// Load backend/.env regardless of PM2 cwd (project root vs backend/)
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
+
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
-import path from 'path';
 import { rateLimit } from 'express-rate-limit';
 import { errorHandler } from './middleware/errorHandler';
 import { logger } from './utils/logger';
+import { getAllowedOrigins } from './utils/corsOrigins';
 import authRoutes from './routes/auth';
 import countryRoutes from './routes/countries';
 import planRoutes from './routes/plans';
@@ -19,7 +24,8 @@ import esimRoutes from './routes/esim';
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// Behind Docker Nginx / aaPanel reverse proxy
+// Trust the first proxy hop when running behind a reverse proxy (Nginx, etc.).
+// Harmless for local development where the API is reached directly.
 app.set('trust proxy', 1);
 
 // Security
@@ -45,13 +51,8 @@ const authLimiter = rateLimit({
 });
 app.use('/api/auth/', authLimiter);
 
-// CORS – allow production domain + FRONTEND_URL
-const allowedOrigins = [
-  process.env.FRONTEND_URL,
-  'http://localhost:3000',
-  'https://esimviet.com',
-  'https://www.esimviet.com',
-].filter(Boolean) as string[];
+// CORS – allow production domains + FRONTEND_URL + ALLOWED_ORIGINS
+const allowedOrigins = getAllowedOrigins();
 
 app.use(cors({
   origin: (origin, callback) => {

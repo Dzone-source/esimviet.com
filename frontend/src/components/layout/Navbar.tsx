@@ -21,8 +21,10 @@ export default function Navbar() {
   }, [pathname]);
 
   const navLinks = [
-    { href: '/countries', label: 'Destinations' },
-    { href: '/blog', label: 'Travel Guides' },
+    { href: '/#vietnam-plans', label: 'Vietnam Plans' },
+    { href: '/#device-compatibility', label: 'Device Check' },
+    { href: '/#how-to-use', label: 'How to Use' },
+    { href: '/blog', label: 'Blog' },
     { href: '/contact', label: 'Support' },
   ];
 
@@ -48,7 +50,7 @@ export default function Navbar() {
                 isScrolled || !isHomePage ? 'text-gray-900' : 'text-white'
               }`}
             >
-              eSIM<span className="text-primary-400">Global</span>
+              eSIM<span className="text-primary-400">Viet</span>
             </span>
           </Link>
 
@@ -74,7 +76,7 @@ export default function Navbar() {
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3">
             <Link
-              href="/countries"
+              href="/#vietnam-plans"
               className="btn-primary text-sm py-2 px-4"
             >
               <Globe className="w-4 h-4" />
@@ -118,7 +120,7 @@ export default function Navbar() {
                 </Link>
               ))}
               <div className="mt-2 pt-2 border-t border-gray-100">
-                <Link href="/countries" className="btn-primary w-full">
+                <Link href="/#vietnam-plans" className="btn-primary w-full">
                   <Globe className="w-4 h-4" />
                   Browse Plans
                 </Link>

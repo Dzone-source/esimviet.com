@@ -84,7 +84,7 @@ export default function AdminDashboardPage() {
           {[
             { label: 'View Orders', href: '/admin/orders', color: 'bg-blue-50 text-blue-700 hover:bg-blue-100' },
             { label: 'Upload eSIM', href: '/admin/orders?status=WaitingUpload', color: 'bg-orange-50 text-orange-700 hover:bg-orange-100' },
-            { label: 'Add Country', href: '/admin/countries', color: 'bg-purple-50 text-purple-700 hover:bg-purple-100' },
+            { label: 'Vietnam Settings', href: '/admin/countries', color: 'bg-purple-50 text-purple-700 hover:bg-purple-100' },
             { label: 'Add Plan', href: '/admin/plans', color: 'bg-green-50 text-green-700 hover:bg-green-100' },
           ].map(({ label, href, color }) => (
             <a

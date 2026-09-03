@@ -1,7 +1,8 @@
 'use client';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { Wifi, Clock, Database, Signal, Zap, Check } from 'lucide-react';
+import { Wifi, Clock, Database, Signal, Zap, Check, TrendingDown } from 'lucide-react';
+import { buildPlanComparisons, formatPricePerDay } from '@/lib/planPricing';
 import type { Plan } from '@/types';
 
 interface PlanCardProps {
@@ -12,6 +13,8 @@ interface PlanCardProps {
 
 export default function PlanCard({ plan, countrySlug, featured = false }: PlanCardProps) {
   const price = typeof plan.price === 'string' ? parseFloat(plan.price) : plan.price;
+  const pricePerDay = formatPricePerDay(price, plan.days);
+  const savingsPercent = buildPlanComparisons([plan])[0]?.maxSavingsPercent ?? 0;
 
   return (
     <motion.div
@@ -91,6 +94,19 @@ export default function PlanCard({ plan, countrySlug, featured = false }: PlanCa
             ))}
         </ul>
 
+        {savingsPercent > 0 && (
+          <div
+            className={`mb-4 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ${
+              featured
+                ? 'bg-white/15 text-emerald-100'
+                : 'bg-emerald-50 text-emerald-700'
+            }`}
+          >
+            <TrendingDown className="w-3 h-3 shrink-0" />
+            Up to {savingsPercent}% cheaper than Holafly/Airalo
+          </div>
+        )}
+
         {/* Price + CTA */}
         <div className={`flex items-center justify-between pt-4 border-t ${featured ? 'border-primary-500' : 'border-surface-200'}`}>
           <div>
@@ -98,6 +114,9 @@ export default function PlanCard({ plan, countrySlug, featured = false }: PlanCa
               ${price.toFixed(2)}
             </span>
             <span className={`text-xs ml-1 ${featured ? 'text-primary-200' : 'text-gray-400'}`}>USD</span>
+            <p className={`text-xs font-semibold mt-0.5 ${featured ? 'text-emerald-200' : 'text-emerald-600'}`}>
+              {pricePerDay}
+            </p>
           </div>
           <Link
             href={`/checkout?plan=${plan.id}`}

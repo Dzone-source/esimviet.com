@@ -12,7 +12,7 @@ function getLoginErrorMessage(error: unknown): string {
       return 'Không kết nối được API. Kiểm tra backend đang chạy và NEXT_PUBLIC_API_URL.';
     }
     if (error.response.status === 401) {
-      return 'Sai username hoặc password. Mặc đnh: admin / admin123';
+      return 'Sai username hoặc password';
     }
     if (error.response.status >= 500) {
       return 'Lỗi server – database chưa kết nối hoặc chưa seed. Chạy: npm run reset-admin';
@@ -56,7 +56,7 @@ export default function AdminLoginPage() {
           <div className="w-14 h-14 bg-primary-600 rounded-2xl flex items-center justify-center mx-auto mb-3">
             <Wifi className="w-7 h-7 text-white" />
           </div>
-          <h1 className="text-white text-2xl font-black">eSIM Global</h1>
+          <h1 className="text-white text-2xl font-black">eSIM Viet</h1>
           <p className="text-gray-400 text-sm mt-1">Admin Panel</p>
         </div>
 

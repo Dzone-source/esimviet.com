@@ -45,7 +45,7 @@ export default function CheckoutClient() {
       <div className="pt-24 min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-gray-500 mb-4">No plan selected.</p>
-          <Link href="/countries" className="btn-primary">Browse Plans</Link>
+          <Link href="/#vietnam-plans" className="btn-primary">View Vietnam Plans</Link>
         </div>
       </div>
     );
@@ -64,7 +64,7 @@ export default function CheckoutClient() {
       <div className="pt-24 min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-gray-500 mb-4">Plan not found.</p>
-          <Link href="/countries" className="btn-primary">Browse Plans</Link>
+          <Link href="/#vietnam-plans" className="btn-primary">View Vietnam Plans</Link>
         </div>
       </div>
     );
@@ -110,9 +110,9 @@ export default function CheckoutClient() {
   return (
     <div className="pt-20 pb-24 min-h-screen bg-surface-50">
       <div className="container max-w-5xl mt-8">
-        <Link href={`/countries/${plan.country?.slug}`} className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-700 text-sm mb-6">
+        <Link href="/#vietnam-plans" className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-700 text-sm mb-6">
           <ArrowLeft className="w-4 h-4" />
-          Back to {plan.country?.name}
+          Back to Vietnam Plans
         </Link>
 
         <h1 className="text-3xl font-black text-gray-900 mb-8">Complete Your Order</h1>

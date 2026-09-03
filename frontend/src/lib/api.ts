@@ -22,10 +22,20 @@ function attachAuthHeader(config: InternalAxiosRequestConfig): InternalAxiosRequ
   config.baseURL = '/api';
   const token = localStorage.getItem('admin_token')?.trim();
   if (token) {
-    // Authorization may be stripped by aaPanel/nginx — also send X-Access-Token + cookie
+    // Some reverse proxies strip the Authorization header — also send X-Access-Token + cookie
     setHeader(config, 'Authorization', `Bearer ${token}`);
     setHeader(config, 'X-Access-Token', token);
   }
+
+  // Let the browser set multipart boundary — do not force application/json on FormData
+  if (config.data instanceof FormData) {
+    if (typeof config.headers.delete === 'function') {
+      config.headers.delete('Content-Type');
+    } else {
+      delete (config.headers as Record<string, string>)['Content-Type'];
+    }
+  }
+
   return config;
 }
 

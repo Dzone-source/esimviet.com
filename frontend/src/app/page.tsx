@@ -1,26 +1,36 @@
 import type { Metadata } from 'next';
 import MainLayout from '@/components/layout/MainLayout';
 import HeroSection from '@/components/home/HeroSection';
-import PopularDestinations from '@/components/home/PopularDestinations';
+import VietnamPlansSection from '@/components/home/VietnamPlansSection';
+import RefundPolicySection from '@/components/product/RefundPolicySection';
 import BenefitsSection from '@/components/home/BenefitsSection';
 import HowItWorksSection from '@/components/home/HowItWorksSection';
+import DeviceCompatibilitySection from '@/components/home/DeviceCompatibilitySection';
+import HowToUseSection from '@/components/home/HowToUseSection';
+import VietnamPriceComparisonSection from '@/components/home/VietnamPriceComparisonSection';
+import ProductFAQSection from '@/components/product/ProductFAQSection';
 import TestimonialsSection from '@/components/home/TestimonialsSection';
 import FAQSection from '@/components/home/FAQSection';
 import CTASection from '@/components/home/CTASection';
 
 export const metadata: Metadata = {
-  title: 'eSIM Global – Buy eSIM Online for Travel | Affordable Data Plans',
+  title: 'eSIM Viet – Buy Vietnam eSIM Online | Affordable Data Plans',
   description:
-    'Buy eSIM online for 100+ countries. Affordable data plans, 4G/5G networks, manual delivery within 24 hours. Stay connected anywhere in the world.',
+    'Buy Vietnam eSIM online. Affordable 4G/5G data plans, hotspot included, QR code delivered by email within 24 hours.',
 };
 
 export default function HomePage() {
   return (
     <MainLayout>
       <HeroSection />
-      <PopularDestinations />
+      <VietnamPlansSection />
+      <RefundPolicySection />
       <BenefitsSection />
       <HowItWorksSection />
+      <DeviceCompatibilitySection />
+      <HowToUseSection />
+      <VietnamPriceComparisonSection />
+      <ProductFAQSection />
       <TestimonialsSection />
       <FAQSection />
       <CTASection />

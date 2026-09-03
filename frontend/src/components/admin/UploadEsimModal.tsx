@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
+import axios from 'axios';
 import { Upload, X, QrCode } from 'lucide-react';
 import api from '@/lib/api';
 
@@ -42,14 +43,20 @@ export default function UploadEsimModal({ orderItemId, onClose, onSuccess }: Pro
       if (manualCode) formData.append('manual_code', manualCode);
       if (qrFile) formData.append('qr_image', qrFile);
 
-      await api.post(`/esim/upload/${orderItemId}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      await api.post(`/esim/upload/${orderItemId}`, formData);
 
+      toast.success('eSIM uploaded and email sent');
       onSuccess();
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Upload failed';
-      toast.error(message);
+      if (axios.isAxiosError(err)) {
+        const msg =
+          err.response?.data?.message ||
+          err.response?.data?.errors?.[0]?.msg ||
+          err.message;
+        toast.error(msg || 'Upload failed');
+      } else {
+        toast.error(err instanceof Error ? err.message : 'Upload failed');
+      }
     } finally {
       setLoading(false);
     }

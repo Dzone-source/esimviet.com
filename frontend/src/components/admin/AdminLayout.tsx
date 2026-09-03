@@ -12,7 +12,7 @@ import {
 const NAV_ITEMS = [
   { href: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { href: '/admin/orders', icon: ShoppingBag, label: 'Orders' },
-  { href: '/admin/countries', icon: Globe, label: 'Countries' },
+  { href: '/admin/countries', icon: Globe, label: 'Vietnam' },
   { href: '/admin/plans', icon: Package, label: 'Plans' },
   { href: '/admin/esim', icon: Wifi, label: 'eSIM Codes' },
   { href: '/admin/settings', icon: Settings, label: 'Settings' },
@@ -37,7 +37,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <WifiIcon className="w-4 h-4 text-white" />
           </div>
           <div>
-            <p className="text-white font-bold text-sm">eSIM Global</p>
+            <p className="text-white font-bold text-sm">eSIM Viet</p>
             <p className="text-gray-500 text-xs">Admin Panel</p>
           </div>
           <button

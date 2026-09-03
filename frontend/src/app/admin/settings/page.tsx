@@ -4,15 +4,23 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import api from '@/lib/api';
-import { Save, Settings, CreditCard, Mail, Share2 } from 'lucide-react';
+import { Save, Settings, CreditCard, Share2, KeyRound } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
 
 export default function AdminSettingsPage() {
+  const { user, logout } = useAuth();
   const [formData, setFormData] = useState({
     site_name: '',
     contact_email: '',
     facebook: '',
     paypal_client_id: '',
     paypal_secret: '',
+  });
+  const [accountData, setAccountData] = useState({
+    username: '',
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
   });
 
   const { data: settings, isLoading } = useQuery({
@@ -35,15 +43,77 @@ export default function AdminSettingsPage() {
     }
   }, [settings]);
 
+  useEffect(() => {
+    if (user?.username) {
+      setAccountData((prev) => ({ ...prev, username: user.username }));
+    }
+  }, [user?.username]);
+
   const updateMutation = useMutation({
     mutationFn: (data: Record<string, string>) => api.put('/settings', data),
     onSuccess: () => toast.success('Settings saved'),
     onError: () => toast.error('Failed to save'),
   });
 
+  const accountMutation = useMutation({
+    mutationFn: (data: { currentPassword: string; username?: string; newPassword?: string }) =>
+      api.put('/auth/account', data),
+    onSuccess: (_res, variables) => {
+      const usernameChanged = variables.username && variables.username !== user?.username;
+      toast.success(usernameChanged ? 'Username updated — please sign in again' : 'Account updated');
+      if (usernameChanged) {
+        setTimeout(() => logout(), 800);
+      } else {
+        setAccountData((prev) => ({
+          ...prev,
+          currentPassword: '',
+          newPassword: '',
+          confirmPassword: '',
+        }));
+      }
+    },
+    onError: (err: { response?: { data?: { message?: string } } }) => {
+      toast.error(err.response?.data?.message || 'Failed to update account');
+    },
+  });
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     updateMutation.mutate(formData);
+  };
+
+  const handleAccountSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!accountData.currentPassword) {
+      toast.error('Enter your current password');
+      return;
+    }
+    if (accountData.newPassword && accountData.newPassword !== accountData.confirmPassword) {
+      toast.error('New passwords do not match');
+      return;
+    }
+    if (accountData.username.length < 3) {
+      toast.error('Username must be at least 3 characters');
+      return;
+    }
+
+    const payload: { currentPassword: string; username?: string; newPassword?: string } = {
+      currentPassword: accountData.currentPassword,
+    };
+
+    if (accountData.username !== user?.username) {
+      payload.username = accountData.username;
+    }
+    if (accountData.newPassword) {
+      payload.newPassword = accountData.newPassword;
+    }
+
+    if (!payload.username && !payload.newPassword) {
+      toast.error('Change username and/or enter a new password');
+      return;
+    }
+
+    accountMutation.mutate(payload);
   };
 
   if (isLoading) {
@@ -61,8 +131,70 @@ export default function AdminSettingsPage() {
         <p className="text-gray-400 text-sm">Configure your eSIM store</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="max-w-2xl space-y-6">
-        {/* General */}
+      <div className="max-w-2xl space-y-6">
+        {/* Admin account */}
+        <motion.form
+          onSubmit={handleAccountSubmit}
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-white rounded-2xl p-6 shadow-card border border-surface-200 space-y-4"
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <KeyRound className="w-5 h-5 text-primary-600" />
+            <h2 className="font-bold text-gray-900">Admin Account</h2>
+          </div>
+          <div>
+            <label className="label">Username</label>
+            <input
+              value={accountData.username}
+              onChange={(e) => setAccountData({ ...accountData, username: e.target.value })}
+              className="input"
+              autoComplete="username"
+            />
+          </div>
+          <div>
+            <label className="label">Current Password</label>
+            <input
+              type="password"
+              value={accountData.currentPassword}
+              onChange={(e) => setAccountData({ ...accountData, currentPassword: e.target.value })}
+              className="input"
+              autoComplete="current-password"
+            />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="label">New Password (optional)</label>
+              <input
+                type="password"
+                value={accountData.newPassword}
+                onChange={(e) => setAccountData({ ...accountData, newPassword: e.target.value })}
+                className="input"
+                autoComplete="new-password"
+                placeholder="Min. 6 characters"
+              />
+            </div>
+            <div>
+              <label className="label">Confirm New Password</label>
+              <input
+                type="password"
+                value={accountData.confirmPassword}
+                onChange={(e) => setAccountData({ ...accountData, confirmPassword: e.target.value })}
+                className="input"
+                autoComplete="new-password"
+              />
+            </div>
+          </div>
+          <button
+            type="submit"
+            disabled={accountMutation.isPending}
+            className="btn-secondary disabled:opacity-60"
+          >
+            {accountMutation.isPending ? 'Updating...' : 'Update Account'}
+          </button>
+        </motion.form>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -171,7 +303,8 @@ export default function AdminSettingsPage() {
           )}
           Save Settings
         </button>
-      </form>
+        </form>
+      </div>
     </div>
   );
 }
