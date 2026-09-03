@@ -3,9 +3,10 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import {
-  type HeroBackground,
-  pickRandomHeroBackground,
-} from '@/lib/heroBackgrounds';
+  type HeroPoolImage,
+  pickRotatingHeroBackground,
+} from '@/lib/heroPoolRotation';
+import { HERO_BACKGROUNDS } from '@/lib/heroBackgrounds';
 
 type Props = {
   alt: string;
@@ -13,14 +14,35 @@ type Props = {
 };
 
 /**
- * Picks a random Vietnam wallpaper on each page load (one image request).
- * Dark base + blur LQIP until WebP arrives.
+ * Random hero wallpaper with 20-active / 20-reserve rotation.
+ * Falls back to the small static pool if the API is unavailable.
  */
 export default function HeroBackgroundImage({ alt, className = '' }: Props) {
-  const [bg, setBg] = useState<HeroBackground | null>(null);
+  const [bg, setBg] = useState<HeroPoolImage | null>(null);
 
   useEffect(() => {
-    setBg(pickRandomHeroBackground());
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const picked = await pickRotatingHeroBackground();
+        if (!cancelled && picked) {
+          setBg(picked);
+          return;
+        }
+      } catch {
+        // fall through
+      }
+
+      if (!cancelled) {
+        const fallback = HERO_BACKGROUNDS[Math.floor(Math.random() * HERO_BACKGROUNDS.length)];
+        setBg(fallback);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return (
