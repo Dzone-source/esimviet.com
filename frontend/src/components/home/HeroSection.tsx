@@ -1,28 +1,25 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Wifi, Zap } from 'lucide-react';
+import Link from 'next/link';
 import HeroBackgroundImage from '@/components/common/HeroBackgroundImage';
 
 export default function HeroSection() {
-  const router = useRouter();
-
   return (
-    <section className="relative min-h-[92vh] flex items-center overflow-hidden pt-16">
+    <section className="relative min-h-[52vh] md:min-h-[56vh] flex items-center overflow-hidden pt-16 pb-10">
       <HeroBackgroundImage alt="Vietnam landscape wallpaper" />
 
-      {/* Readability overlays */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-black/65" />
       <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/30" />
 
       <div className="container relative z-10">
         <div className="max-w-3xl mx-auto text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45 }}
-            className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-white/90 text-sm font-medium mb-6"
+            transition={{ duration: 0.4 }}
+            className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-white/90 text-sm font-medium mb-5"
           >
             <Wifi className="w-4 h-4 text-blue-300" />
             Vietnam eSIM for Travelers
@@ -30,10 +27,10 @@ export default function HeroSection() {
           </motion.div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.08 }}
-            className="text-4xl sm:text-5xl md:text-6xl font-black text-white leading-[1.1] mb-6 drop-shadow-lg"
+            transition={{ duration: 0.45, delay: 0.06 }}
+            className="text-4xl sm:text-5xl md:text-6xl font-black text-white leading-[1.1] mb-4 drop-shadow-lg"
           >
             Vietnam eSIM
             <br />
@@ -43,52 +40,34 @@ export default function HeroSection() {
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.15 }}
-            className="text-white/90 text-lg md:text-xl mb-10 max-w-xl mx-auto drop-shadow"
+            transition={{ duration: 0.45, delay: 0.12 }}
+            className="text-white/90 text-lg md:text-xl mb-8 max-w-xl mx-auto drop-shadow"
           >
             Buy a Vietnam eSIM online. No physical SIM, no roaming fees.
             QR code delivered by email — activate on arrival.
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.22 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center mb-4"
+            transition={{ duration: 0.45, delay: 0.18 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <button
-              onClick={() => router.push('/countries/vietnam')}
+            <Link
+              href="/#vietnam-plans"
               className="inline-flex items-center justify-center gap-2 bg-white text-primary-700 hover:bg-blue-50 font-bold px-8 py-4 rounded-2xl transition-all duration-200 hover:shadow-lg active:scale-95"
             >
               <Zap className="w-5 h-5" />
               View Vietnam Plans
-            </button>
-            <button
-              onClick={() => router.push('/#device-compatibility')}
+            </Link>
+            <Link
+              href="/#device-compatibility"
               className="inline-flex items-center justify-center gap-2 bg-white/15 hover:bg-white/25 text-white border border-white/30 backdrop-blur-sm font-semibold px-8 py-4 rounded-2xl transition-all duration-200"
             >
               Check Device Compatible
-            </button>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.35 }}
-            className="grid grid-cols-3 gap-4 mt-14 max-w-sm mx-auto"
-          >
-            {[
-              { value: '4G/5G', label: 'Vietnam Networks' },
-              { value: '10K+', label: 'Travelers' },
-              { value: '4.9★', label: 'Rating' },
-            ].map(({ value, label }) => (
-              <div key={label} className="text-center">
-                <div className="text-2xl font-black text-white drop-shadow">{value}</div>
-                <div className="text-white/70 text-xs">{label}</div>
-              </div>
-            ))}
+            </Link>
           </motion.div>
         </div>
       </div>

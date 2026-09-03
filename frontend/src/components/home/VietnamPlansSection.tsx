@@ -23,7 +23,7 @@ export default function VietnamPlansSection() {
   const maxSavings = getMaxSavingsAcrossPlans(plans);
 
   return (
-    <section className="section bg-white">
+    <section id="vietnam-plans" className="pt-10 md:pt-14 pb-16 md:pb-24 bg-white scroll-mt-20">
       <div className="container">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -37,10 +37,10 @@ export default function VietnamPlansSection() {
             Vietnam eSIM Plans
           </div>
           <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-3">
-            🇻🇳 Stay Connected in Vietnam
+            Choose Your Vietnam Plan
           </h2>
           <p className="text-gray-500 max-w-lg mx-auto">
-            Affordable 4G/5G data plans for travelers visiting Vietnam. Hotspot included on every plan.
+            Affordable 4G/5G data for travelers in Vietnam. Hotspot included on every plan.
           </p>
           {maxSavings > 0 && (
             <p className="text-sm font-semibold text-emerald-600 mt-3">

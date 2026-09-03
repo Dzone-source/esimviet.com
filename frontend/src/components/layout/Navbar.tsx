@@ -21,7 +21,7 @@ export default function Navbar() {
   }, [pathname]);
 
   const navLinks = [
-    { href: '/countries/vietnam', label: 'Vietnam Plans' },
+    { href: '/#vietnam-plans', label: 'Vietnam Plans' },
     { href: '/#device-compatibility', label: 'Device Check' },
     { href: '/#how-to-use', label: 'How to Use' },
     { href: '/blog', label: 'Blog' },
@@ -76,7 +76,7 @@ export default function Navbar() {
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3">
             <Link
-              href="/countries/vietnam"
+              href="/#vietnam-plans"
               className="btn-primary text-sm py-2 px-4"
             >
               <Globe className="w-4 h-4" />
@@ -120,7 +120,7 @@ export default function Navbar() {
                 </Link>
               ))}
               <div className="mt-2 pt-2 border-t border-gray-100">
-                <Link href="/countries/vietnam" className="btn-primary w-full">
+                <Link href="/#vietnam-plans" className="btn-primary w-full">
                   <Globe className="w-4 h-4" />
                   Browse Plans
                 </Link>

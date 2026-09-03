@@ -34,7 +34,7 @@ export default function CTASection() {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/countries/vietnam"
+                href="/#vietnam-plans"
                 className="inline-flex items-center justify-center gap-2 bg-white text-primary-700 hover:bg-blue-50 font-bold px-8 py-4 rounded-2xl transition-all duration-200 hover:shadow-lg active:scale-95"
               >
                 <Globe className="w-5 h-5" />
