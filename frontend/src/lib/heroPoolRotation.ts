@@ -13,7 +13,7 @@ type HeroPoolState = {
   cursor: number;
 };
 
-const STORAGE_KEY = 'esimviet_hero_pool_v1';
+const STORAGE_KEY = 'esimviet_hero_pool_v2';
 const BATCH_SIZE = 20;
 
 function readState(): HeroPoolState | null {

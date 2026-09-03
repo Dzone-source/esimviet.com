@@ -1,0 +1,50 @@
+# Hero wallpaper credits
+
+Photos from [Unsplash — Vietnam](https://unsplash.com/s/photos/vietnam).
+License: [Unsplash License](https://unsplash.com/license).
+
+- unsplash-01-1469854523086-cc02fe5d8800: https://images.unsplash.com/photo-1469854523086-cc02fe5d8800
+- unsplash-02-1504609773096-104ff2c73ba4: https://images.unsplash.com/photo-1504609773096-104ff2c73ba4
+- unsplash-03-1506703719100-a0f3a48c0f86: https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86
+- unsplash-04-1508009603885-50cf7c579365: https://images.unsplash.com/photo-1508009603885-50cf7c579365
+- unsplash-05-1528127269322-539801943592: https://images.unsplash.com/photo-1528127269322-539801943592
+- unsplash-06-1529973625058-a665431328fb: https://images.unsplash.com/photo-1529973625058-a665431328fb
+- unsplash-07-1531761535209-180857e963b9: https://images.unsplash.com/photo-1531761535209-180857e963b9
+- unsplash-08-1534787238916-9ba6764efd4f: https://images.unsplash.com/photo-1534787238916-9ba6764efd4f
+- unsplash-09-1552465011-b4e21bf6e79a: https://images.unsplash.com/photo-1552465011-b4e21bf6e79a
+- unsplash-10-1555921015-5532091f6026: https://images.unsplash.com/photo-1555921015-5532091f6026
+- unsplash-11-1556383166-eded0173b7fd: https://images.unsplash.com/photo-1556383166-eded0173b7fd
+- unsplash-12-1557750255-c76072a7aad1: https://images.unsplash.com/photo-1557750255-c76072a7aad1
+- unsplash-13-1559592413-7cec4d0cae2b: https://images.unsplash.com/photo-1559592413-7cec4d0cae2b
+- unsplash-14-1559627717-bdb2d005a87e: https://images.unsplash.com/photo-1559627717-bdb2d005a87e
+- unsplash-15-1561461221-959c3f16234b: https://images.unsplash.com/photo-1561461221-959c3f16234b
+- unsplash-16-1578322813316-27f5fe5cd466: https://images.unsplash.com/photo-1578322813316-27f5fe5cd466
+- unsplash-17-1578662996442-48f60103fc96: https://images.unsplash.com/photo-1578662996442-48f60103fc96
+- unsplash-18-1581552456143-0cd325c6a20d: https://images.unsplash.com/photo-1581552456143-0cd325c6a20d
+- unsplash-19-1583417319070-4a69db38a482: https://images.unsplash.com/photo-1583417319070-4a69db38a482
+- unsplash-20-1584227039542-1871579a7d16: https://images.unsplash.com/photo-1584227039542-1871579a7d16
+- unsplash-21-1586100866229-5749c821a61d: https://images.unsplash.com/photo-1586100866229-5749c821a61d
+- unsplash-22-1593693397690-362cb9666fc2: https://images.unsplash.com/photo-1593693397690-362cb9666fc2
+- unsplash-23-1596422846543-75c6fc197f07: https://images.unsplash.com/photo-1596422846543-75c6fc197f07
+- unsplash-24-1600573472591-ee6b68d14c68: https://images.unsplash.com/photo-1600573472591-ee6b68d14c68
+- unsplash-25-1625396836163-80c0d3d7eb86: https://images.unsplash.com/photo-1625396836163-80c0d3d7eb86
+- unsplash-26-1629059465910-a5498f0bc2f5: https://images.unsplash.com/photo-1629059465910-a5498f0bc2f5
+- unsplash-27-1641563634844-bcda72f71221: https://images.unsplash.com/photo-1641563634844-bcda72f71221
+- unsplash-28-1643029891412-92f9a81a8c16: https://images.unsplash.com/photo-1643029891412-92f9a81a8c16
+- unsplash-29-1652540755628-47f6c1480f0b: https://images.unsplash.com/photo-1652540755628-47f6c1480f0b
+- unsplash-30-1658298044866-566882b0ed62: https://images.unsplash.com/photo-1658298044866-566882b0ed62
+- unsplash-31-1668000018482-a02acf02b22a: https://images.unsplash.com/photo-1668000018482-a02acf02b22a
+- unsplash-32-1669777776138-0cabf8027f37: https://images.unsplash.com/photo-1669777776138-0cabf8027f37
+- unsplash-33-1674020539271-6f24f97091d7: https://images.unsplash.com/photo-1674020539271-6f24f97091d7
+- unsplash-34-1675111066042-9baa4c343157: https://images.unsplash.com/photo-1675111066042-9baa4c343157
+- unsplash-35-1710237664295-54ae931dc5cf: https://images.unsplash.com/photo-1710237664295-54ae931dc5cf
+- unsplash-36-1722987203822-5c7a8b5bdbfd: https://images.unsplash.com/photo-1722987203822-5c7a8b5bdbfd
+- unsplash-37-1743485753956-c6e4f75d8dc5: https://images.unsplash.com/photo-1743485753956-c6e4f75d8dc5
+- unsplash-38-1743485754198-1c80fccaa473: https://images.unsplash.com/photo-1743485754198-1c80fccaa473
+- unsplash-39-1747342621581-13c227d2eede: https://images.unsplash.com/photo-1747342621581-13c227d2eede
+- unsplash-40-1749400495943-8275cd2ce482: https://images.unsplash.com/photo-1749400495943-8275cd2ce482
+- unsplash-41-1758003293450-b9478f02bf48: https://images.unsplash.com/photo-1758003293450-b9478f02bf48
+- unsplash-42-1759503008486-ac9c1bc4c478: https://images.unsplash.com/photo-1759503008486-ac9c1bc4c478
+- unsplash-43-1761127138372-cad230082b19: https://images.unsplash.com/photo-1761127138372-cad230082b19
+- unsplash-44-1768245075094-86ac5e6ebcca: https://images.unsplash.com/photo-1768245075094-86ac5e6ebcca
+- unsplash-45-1772867342647-6e6d87a0b014: https://images.unsplash.com/photo-1772867342647-6e6d87a0b014
