@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import {
   type HeroBackground,
-  getSessionHeroBackground,
+  pickRandomHeroBackground,
 } from '@/lib/heroBackgrounds';
 
 type Props = {
@@ -13,20 +13,21 @@ type Props = {
 };
 
 /**
- * Loads exactly one session-stable hero wallpaper (no double-fetch).
- * Shows a dark base + blur LQIP until the WebP arrives.
+ * Picks a random Vietnam wallpaper on each page load (one image request).
+ * Dark base + blur LQIP until WebP arrives.
  */
 export default function HeroBackgroundImage({ alt, className = '' }: Props) {
   const [bg, setBg] = useState<HeroBackground | null>(null);
 
   useEffect(() => {
-    setBg(getSessionHeroBackground());
+    setBg(pickRandomHeroBackground());
   }, []);
 
   return (
     <div className={`absolute inset-0 bg-[#0b1a2e] ${className}`}>
       {bg ? (
         <Image
+          key={bg.id}
           src={bg.src}
           alt={alt}
           fill

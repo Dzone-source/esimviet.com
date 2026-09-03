@@ -39,33 +39,6 @@ export const HERO_BACKGROUNDS: readonly HeroBackground[] = [
   },
 ] as const;
 
-const STORAGE_KEY = 'esimviet_hero_bg';
-
 export function pickRandomHeroBackground(): HeroBackground {
   return HERO_BACKGROUNDS[Math.floor(Math.random() * HERO_BACKGROUNDS.length)];
-}
-
-/** Stable pick for this browser session — avoids double-load + flash on navigate. */
-export function getSessionHeroBackground(): HeroBackground {
-  if (typeof window === 'undefined') {
-    return HERO_BACKGROUNDS[0];
-  }
-
-  try {
-    const saved = sessionStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      const found = HERO_BACKGROUNDS.find((item) => item.id === saved);
-      if (found) return found;
-    }
-  } catch {
-    // private mode / blocked storage
-  }
-
-  const picked = pickRandomHeroBackground();
-  try {
-    sessionStorage.setItem(STORAGE_KEY, picked.id);
-  } catch {
-    // ignore
-  }
-  return picked;
 }
