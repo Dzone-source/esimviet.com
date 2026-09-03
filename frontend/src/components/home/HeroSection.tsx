@@ -1,38 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Wifi, Zap } from 'lucide-react';
-import { HERO_BACKGROUNDS, pickRandomHeroBackground } from '@/lib/heroBackgrounds';
+import HeroBackgroundImage from '@/components/common/HeroBackgroundImage';
 
 export default function HeroSection() {
   const router = useRouter();
-  const [bgSrc, setBgSrc] = useState<string>(HERO_BACKGROUNDS[0]);
-
-  useEffect(() => {
-    setBgSrc(pickRandomHeroBackground());
-  }, []);
 
   return (
     <section className="relative min-h-[92vh] flex items-center overflow-hidden pt-16">
-      <motion.div
-        key={bgSrc}
-        className="absolute inset-0"
-        initial={{ scale: 1.08, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 1.2, ease: 'easeOut' }}
-      >
-        <Image
-          src={bgSrc}
-          alt="Vietnam landscape wallpaper"
-          fill
-          priority
-          className="object-cover object-center"
-          sizes="100vw"
-        />
-      </motion.div>
+      <HeroBackgroundImage alt="Vietnam landscape wallpaper" />
 
       {/* Readability overlays */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-black/65" />
@@ -43,7 +21,7 @@ export default function HeroSection() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.45 }}
             className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-white/90 text-sm font-medium mb-6"
           >
             <Wifi className="w-4 h-4 text-blue-300" />
@@ -52,9 +30,9 @@ export default function HeroSection() {
           </motion.div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
+            transition={{ duration: 0.5, delay: 0.08 }}
             className="text-4xl sm:text-5xl md:text-6xl font-black text-white leading-[1.1] mb-6 drop-shadow-lg"
           >
             Vietnam eSIM
@@ -65,9 +43,9 @@ export default function HeroSection() {
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
             className="text-white/90 text-lg md:text-xl mb-10 max-w-xl mx-auto drop-shadow"
           >
             Buy a Vietnam eSIM online. No physical SIM, no roaming fees.
@@ -75,9 +53,9 @@ export default function HeroSection() {
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
+            transition={{ duration: 0.5, delay: 0.22 }}
             className="flex flex-col sm:flex-row gap-4 justify-center mb-4"
           >
             <button
@@ -98,7 +76,7 @@ export default function HeroSection() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
+            transition={{ duration: 0.5, delay: 0.35 }}
             className="grid grid-cols-3 gap-4 mt-14 max-w-sm mx-auto"
           >
             {[

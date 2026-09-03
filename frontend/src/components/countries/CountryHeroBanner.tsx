@@ -1,12 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, MapPin, Wifi } from 'lucide-react';
 import type { Country } from '@/types';
-import { HERO_BACKGROUNDS, pickRandomHeroBackground } from '@/lib/heroBackgrounds';
+import HeroBackgroundImage from '@/components/common/HeroBackgroundImage';
 
 interface CountryHeroBannerProps {
   country: Country;
@@ -14,30 +12,9 @@ interface CountryHeroBannerProps {
 }
 
 export default function CountryHeroBanner({ country, planCount }: CountryHeroBannerProps) {
-  const [bgSrc, setBgSrc] = useState<string>(HERO_BACKGROUNDS[0]);
-
-  useEffect(() => {
-    setBgSrc(pickRandomHeroBackground());
-  }, []);
-
   return (
     <div className="relative min-h-[52vh] md:min-h-[58vh] flex items-end pb-12 overflow-hidden pt-16">
-      <motion.div
-        key={bgSrc}
-        className="absolute inset-0"
-        initial={{ scale: 1.08, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 1.2, ease: 'easeOut' }}
-      >
-        <Image
-          src={bgSrc}
-          alt={`${country.name} travel landscape`}
-          fill
-          priority
-          className="object-cover object-center"
-          sizes="100vw"
-        />
-      </motion.div>
+      <HeroBackgroundImage alt={`${country.name} travel landscape`} />
 
       <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-black/65" />
       <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/25" />
@@ -51,7 +28,7 @@ export default function CountryHeroBanner({ country, planCount }: CountryHeroBan
           Back to Home
         </Link>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }}>
           <div className="flex items-center gap-4 mb-3">
             <span className="text-6xl drop-shadow-lg">{country.flag}</span>
             <div>
