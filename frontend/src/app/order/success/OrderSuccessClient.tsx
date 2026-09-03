@@ -121,7 +121,7 @@ export default function OrderSuccessClient() {
 
             {/* CTA */}
             <div className="flex flex-col sm:flex-row gap-3">
-              <Link href="/countries/vietnam" className="btn-primary flex-1 justify-center">
+              <Link href="/#vietnam-plans" className="btn-primary flex-1 justify-center">
                 Browse More Plans
                 <ArrowRight className="w-4 h-4" />
               </Link>

@@ -67,7 +67,7 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4">Vietnam Plans</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="/countries/vietnam" className="text-gray-400 hover:text-white text-sm transition-colors">
+                <Link href="/#vietnam-plans" className="text-gray-400 hover:text-white text-sm transition-colors">
                   All Vietnam Plans
                 </Link>
               </li>

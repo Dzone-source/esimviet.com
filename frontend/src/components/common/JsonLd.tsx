@@ -24,7 +24,7 @@ export function WebsiteJsonLd() {
           '@type': 'SearchAction',
           target: {
             '@type': 'EntryPoint',
-            urlTemplate: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://esimviet.com'}/countries/vietnam`,
+            urlTemplate: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://esimviet.com'}/#vietnam-plans`,
           },
         },
       }}

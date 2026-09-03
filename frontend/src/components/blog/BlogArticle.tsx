@@ -56,7 +56,7 @@ export default function BlogArticle({ post }: BlogArticleProps) {
               <p className="text-gray-600 text-sm mb-4">
                 Get affordable 4G/5G data with hotspot included. QR code delivered by email.
               </p>
-              <Link href="/countries/vietnam" className="btn-primary inline-flex">
+              <Link href="/#vietnam-plans" className="btn-primary inline-flex">
                 View Vietnam eSIM Plans
               </Link>
             </div>

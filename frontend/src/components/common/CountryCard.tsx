@@ -27,7 +27,7 @@ export default function CountryCard({ country, index = 0 }: CountryCardProps) {
       whileHover={{ y: -4 }}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
     >
-      <Link href={`/countries/${country.slug}`} className="block group">
+      <Link href="/#vietnam-plans" className="block group">
         <div className="card-hover overflow-hidden">
           {/* Cover image / gradient */}
           <div className={`relative h-36 bg-gradient-to-br ${gradient} flex items-center justify-center overflow-hidden`}>

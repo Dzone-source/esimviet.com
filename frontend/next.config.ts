@@ -19,6 +19,20 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: '/countries',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/countries/:slug*',
+        destination: '/',
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {
